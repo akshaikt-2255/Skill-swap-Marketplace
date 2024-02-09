@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import SkillCategoriesSection from "./CategorySection";
 import SkillEventsSection from "./EventSection";
 import "./HomePage.css";
@@ -13,7 +14,7 @@ const HomePage = () => {
         speaking, there are thousands of people who share it on SkillSwap. Swap
         skills and learn new ones every day—sign up to join the community.
       </p>
-      <button className="join-button">Join SkillSwap</button>
+      <button className="join-button"><Link to="/register">Join SkillSwap</Link></button>
 
       <SkillEventsSection />
 
