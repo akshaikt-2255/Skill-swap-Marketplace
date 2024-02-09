@@ -1,0 +1,96 @@
+.footer {
+    background-color: #242424;
+    /* Dark background */
+    color: rgba(255, 255, 255, 0.87);
+    /* Light text color for contrast */
+    padding: 40px 0;
+    /* Padding above and below the footer content */
+}
+
+.footerTitle {
+    color: #fff;
+    /* White color for titles */
+    margin-bottom: 20px;
+    /* Space below the title */
+}
+
+.footerLink {
+    color: #fff;
+    /* White color for links */
+    margin-bottom: 10px;
+    /* Space below each link */
+    display: block;
+    /* Each link takes up its own line */
+    text-decoration: none !important;
+    /* No underline */
+}
+
+.footerLink:hover {
+    color: #61dafb;
+    /* Light blue color on hover for links */
+    text-decoration: underline;
+    /* Underline on hover */
+}
+
+.socialMedia {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Space out social icons and follow us text */
+    margin-top: 20px;
+    /* Space above the social media icons */
+}
+
+.footerIcon {
+    color: #fff;
+    /* White color for icons */
+    margin-right: 16px;
+    /* Space between icons */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+}
+
+.footerIcon:hover {
+    color: #61dafb;
+    /* Light blue color on hover for icons */
+}
+
+.legalLinks {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    /* Light border above the legal links */
+    padding-top: 20px;
+    /* Space above the legal links */
+    /* Space between columns and legal links */
+    display: flex;
+    flex-wrap: wrap;
+    /* Ensure wrapping on small screens */
+    justify-content: center;
+    /* Center legal links */
+}
+
+.copyright {
+    text-align: center;
+    /* Center the copyright text */
+    margin-top: 20px;
+    /* Space above the copyright */
+    color: rgba(255, 255, 255, 0.5);
+    /* Slightly dimmed white color */
+}
+
+@media (max-width: 600px) {
+    .footer {
+        padding: 20px 0;
+        /* Less padding on smaller screens */
+    }
+
+    .socialMedia,
+    .legalLinks {
+        justify-content: center;
+        /* Center on small screens */
+    }
+
+    .footerIcon {
+        margin: 0 8px;
+        /* Less space between icons on smaller screens */
+    }
+}
