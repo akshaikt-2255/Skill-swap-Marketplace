@@ -1,17 +1,50 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-//import { createUserApi, getUserApi } from '../api/auth'; // Adjust the import paths to match your project structure
 
-const createUserApi = (data) => data;
-const getUserApi = (data) => data;
+const createUserApi = async (userData) => {
+  const response = await fetch('http://localhost:4000/api/auth/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userData),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.log({errorData})
+    throw new Error(errorData.message || 'Could not create user');
+  }
+
+  return await response.json();
+};
+
+const getUserApi = async (userData) => {
+  const response = await fetch('http://localhost:4000/api/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userData),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Login failed');
+  }
+
+  return await response.json();
+};
+
 export const createUser = createAsyncThunk(
   'user/createUser',
   async (userData, { rejectWithValue }) => {
     try {
       console.log({userData})
       const response = await createUserApi(userData);
+      console.log({response})
       return response.data; 
     } catch (error) {
-      return rejectWithValue(error.response.data.error || 'Could not create user');
+      console.log({error})
+      return rejectWithValue(error.message || 'Could not create user');
     }
   }
 );
@@ -19,10 +52,20 @@ export const createUser = createAsyncThunk(
 
 export const getUser = createAsyncThunk(
   'user/getUser',
-  async (userId, { rejectWithValue }) => {
+  async (userData, { rejectWithValue }) => {
     try {
-      const response = await getUserApi(userId);
-      return response.data; 
+      const response = await getUserApi(userData);
+      console.log({response})
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('username', response.username);
+        return {
+          username: response.username,
+        }
+      } else {
+        console.log("error")
+        throw new Error('Token not found in the response');
+      }
     } catch (error) {
       return rejectWithValue(error.response.data.error || 'Could not fetch user');
     }
