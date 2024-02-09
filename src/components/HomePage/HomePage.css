@@ -1,0 +1,57 @@
+.homepage {
+    font-family: 'Nunito Sans', sans-serif;
+    padding: 20px;
+  }
+  
+  .homepage-title {
+    color: #23B0BE;
+    text-align: center;
+  }
+  
+  .homepage-description {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .join-button {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #23B0BE;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .featured-skills, .success-stories, .upcoming-events {
+    margin-top: 40px;
+  }
+  
+  .skills-grid, .testimonials-grid, .events-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  
+  .skill-card, .testimonial-card, .event-card {
+    flex-basis: calc(33% - 20px);
+    margin: 10px;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  @media (max-width: 768px) {
+    .skill-card, .testimonial-card, .event-card {
+      flex-basis: calc(50% - 20px);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .skill-card, .testimonial-card, .event-card {
+      flex-basis: 100%;
+    }
+  }
+  
