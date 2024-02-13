@@ -52,6 +52,14 @@
   text-align: right;
 }
 
+.snack-positive {
+  background-color: green !important;
+}
+
+.snack-negative {
+  background-color: red !important;
+}
+
 @media (max-width: 960px) {
   .paper {
     flex-direction: column;
