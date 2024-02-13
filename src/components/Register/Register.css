@@ -4,7 +4,6 @@
   border-radius: 15px;
   overflow: hidden;
 }
-
 .image-container {
   display: flex;
   justify-content: center;
@@ -21,6 +20,7 @@
   object-fit: cover;
   position: absolute;
 }
+
 
 
 .form-container {
@@ -63,6 +63,7 @@
 
   .image {
     width: 100%;
-    max-height: 250px;
+    object-fit: contain;
+    position: relative;
   }
 }
