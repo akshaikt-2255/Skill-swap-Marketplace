@@ -1,0 +1,112 @@
+.about-us {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.intro-section {
+    width: 100%; 
+    padding: 40px 20px; 
+    box-sizing: border-box; 
+    text-align: center; 
+    background-color: #fff; 
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .intro-section h1, 
+  .intro-section p {
+    margin: 0 auto;
+  }
+  
+  @media (max-width: 768px) {
+    .intro-section {
+      padding: 20px;
+    }
+  }
+  
+.header-color {
+    color: #23B0BE;
+}
+.image-content-section,
+.content-image-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.about-image {
+    flex: 1 1 45%;
+    max-width: 45%;
+    height: auto;
+}
+
+.content {
+    flex: 1 1 45%;
+    max-width: 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+
+    .about-image,
+    .content {
+        max-width: 90%;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+
+    .about-image,
+    .content {
+        max-width: 45%;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+
+    .intro-section,
+    .image-content-section,
+    .content-image-section {
+        padding: 0 20px;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+
+    .intro-section,
+    .image-content-section,
+    .content-image-section {
+        padding: 0 40px;
+    }
+}
+
+/* Adjust text size on different screen sizes for better readability */
+@media (max-width: 992px) {
+    .content h3 {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .image-content-section, .content-image-section {
+        flex-direction: column;
+        text-align: center;
+      }
+    
+      .about-image, .content {
+        max-width: 100%;
+      }
+}

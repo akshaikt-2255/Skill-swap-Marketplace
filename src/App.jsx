@@ -9,6 +9,7 @@ const Login = lazy(() => import('./components/Login/Login'));
 const Register = lazy(() => import('./components/Register/Register'));
 const Footer = lazy(() => import('./components/Footer/Footer'));
 const ErrorPage = lazy(() => import('./components/ErrorPage/Error'));
+const AboutUs = lazy(() => import('./components/About/AboutUs'));
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/about" element={<AboutUs />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </main>
