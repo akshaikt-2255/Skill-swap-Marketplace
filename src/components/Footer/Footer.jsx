@@ -32,7 +32,7 @@ const Footer = () => {
             <Typography variant="h6" gutterBottom className="footerTitle">
               SkillSwap
             </Typography>
-            <Link href="#" className="footerLink">About</Link>
+            <Link href="/about" className="footerLink">About</Link>
             <Link href="#" className="footerLink">Blog</Link>
             <Link href="#" className="footerLink">Careers</Link>
             <Link href="#" className="footerLink">Apps</Link>
