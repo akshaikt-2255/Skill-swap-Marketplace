@@ -67,7 +67,7 @@ export const getUser = createAsyncThunk(
         throw new Error('Token not found in the response');
       }
     } catch (error) {
-      return rejectWithValue(error.response.data.error || 'Could not fetch user');
+      return rejectWithValue(error.message || 'Could not fetch user');
     }
   }
 );

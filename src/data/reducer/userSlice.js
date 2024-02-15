@@ -44,7 +44,7 @@ const userSlice = createSlice({
     });
     builder.addCase(getUser.rejected, (state, action) => {
       state.status = 'failed';
-      state.error = action.error.message || 'Could not fetch user';
+      state.error = action.payload || 'Could not fetch user';
     });
   },
 });
