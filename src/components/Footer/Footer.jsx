@@ -9,8 +9,8 @@ const Footer = () => {
   return (
     <Box className="footer">
       <Container maxWidth="lg">
-        <Grid container spacing={5}>
-          <Grid item xs={12} sm={4}>
+      <Grid container spacing={5} sx={{ justifyContent: { xs: 'center', sm: 'flex-start' } }}>
+          <Grid item xs={12} sm={4} sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
             <Typography variant="h6" gutterBottom className="footerTitle">
               Your Account
             </Typography>
@@ -18,17 +18,17 @@ const Footer = () => {
             <Link href="#" className="footerLink">Log in</Link>
             <Link href="#" className="footerLink">Help</Link>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={4} sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
             <Typography variant="h6" gutterBottom className="footerTitle">
               Discover
             </Typography>
-            <Link href="#" className="footerLink">skills</Link>
+            <Link href="#" className="footerLink">Skills</Link>
             <Link href="#" className="footerLink">Calendar</Link>
             <Link href="#" className="footerLink">Categories</Link>
             <Link href="#" className="footerLink">Cities</Link>
             <Link href="#" className="footerLink">Online Events</Link>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={4} sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
             <Typography variant="h6" gutterBottom className="footerTitle">
               SkillSwap
             </Typography>
