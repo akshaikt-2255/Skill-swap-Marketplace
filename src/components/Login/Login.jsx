@@ -9,10 +9,12 @@ import {
   Paper,
   IconButton,
   InputAdornment,
+  SnackbarContent,
+  Snackbar,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Close, Visibility, VisibilityOff } from "@mui/icons-material";
 import "./Login.css";
-import registerImg from '../../assets/register.png';
+import registerImg from "../../assets/register.png";
 import { useDispatch } from "react-redux";
 import { getUser } from "../../data/reducer/api/userThunk";
 
@@ -23,6 +25,9 @@ const Login = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [isError, setIsError] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -33,8 +38,17 @@ const Login = () => {
     });
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleSnackbarOpen = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
   };
 
   const validateForm = () => {
@@ -49,15 +63,20 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateForm()) {
-      try {
-        const actionResult = await dispatch(getUser(formData));
+      const actionResult = await dispatch(getUser(formData));
+      if (actionResult?.error) {
+        const errorMessage = actionResult?.payload;
+        setIsError(true);
+        handleSnackbarOpen(errorMessage);
+      } else {
         const user = actionResult.payload.username;
+        setIsError(false);
         if (user) {
-          navigate('/');
+          handleSnackbarOpen("Logged in successfully");
+          setTimeout(() => {
+            navigate("/");
+          }, 1000);
         }
-      } catch (error) {
-        console.error("Failed to login: ", error);
-        setErrors({ form: "Failed to login, please try again" });
       }
     }
   };
@@ -115,7 +134,11 @@ const Login = () => {
                 }}
               />
               {errors.form && (
-                <Typography color="error" variant="body2" style={{ marginTop: '10px' }}>
+                <Typography
+                  color="error"
+                  variant="body2"
+                  style={{ marginTop: "10px" }}
+                >
                   {errors.form}
                 </Typography>
               )}
@@ -137,6 +160,27 @@ const Login = () => {
           </Grid>
         </Grid>
       </Paper>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <SnackbarContent
+          message={snackbarMessage}
+          className={!isError ? "snack-positive" : "snack-negative"}
+          action={
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleSnackbarClose}
+            >
+              <Close fontSize="small" />
+            </IconButton>
+          }
+        />
+      </Snackbar>
     </Container>
   );
 };

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Container, Grid, TextField, Button, Typography, Paper, IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Container, Grid, TextField, Button, Typography, Paper, IconButton, InputAdornment,SnackbarContent,
+  Snackbar, } from "@mui/material";
+import { Visibility, VisibilityOff,Close } from "@mui/icons-material";
 import { useDispatch } from 'react-redux';
 import { createUser } from '../../data/reducer/api/userThunk'; // Adjust the import path as needed
 import "./Register.css"; 
@@ -17,6 +18,9 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -26,6 +30,15 @@ const Register = () => {
     if (errors[name]) {
       setErrors({ ...errors, [name]: null });
     }
+  };
+
+  const handleSnackbarOpen = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   const validateForm = () => {
@@ -51,10 +64,15 @@ const Register = () => {
         password: formData.password,
       })).unwrap()
         .then((res) => {
-          console.log({res})
-          navigate("/login");
+          setIsError(false);
+          handleSnackbarOpen('User registered successfully, please login');
+          setTimeout(() => {
+            navigate("/login");
+          }, 1000);
         })
         .catch((error) => {
+          setIsError(true);
+          handleSnackbarOpen(error)
           console.error("Registration Error:", error);
           setErrors({ form: error });
         });
@@ -134,7 +152,7 @@ const Register = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 error={!!errors.confirmPassword}
-                helperText={errors.confirmPassword || (errors.form && <Typography color="error">{errors.form}</Typography>)}
+                helperText={errors.confirmPassword}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -163,6 +181,27 @@ const Register = () => {
           </Grid>
         </Grid>
       </Paper>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <SnackbarContent
+          message={snackbarMessage}
+          className={!isError ? "snack-positive" : "snack-negative"}
+          action={
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleSnackbarClose}
+            >
+              <Close fontSize="small" />
+            </IconButton>
+          }
+        />
+      </Snackbar>
     </Container>
   );
 };
