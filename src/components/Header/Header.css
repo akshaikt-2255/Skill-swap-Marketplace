@@ -1,12 +1,15 @@
 .app-header {
     background-color: #282c34;
     min-height: 70px;
+    color: white;
+}
+.menu-wrapper{
+    padding: 20px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
-    color: white;
+
 }
 
 .search {
@@ -43,4 +46,71 @@
 
 .login-signup .login-button {
     background-color: transparent;
+}
+
+.mobile-menu{
+    display: none;
+}
+.menu-bar{
+    display: none;
+}
+@media screen and (max-width: 768px) {
+    .menu-bar{
+        display: block;
+    }
+    .main-menu{
+        display: none;
+    }
+    .bar{
+        background: #61dafb;
+        width: 25px;
+        height: 3px;
+        display: block;
+        margin-bottom: 4px;
+        margin-left: auto;
+        transition: all 0.6s ease;
+    }
+
+    .app-header.menu-open .bar:first-child {
+        background: #61dafb;
+        transform: translateY(7px) rotate(40deg);
+        transition: all 0.6s ease;
+
+    }
+
+    .app-header.menu-open .bar:nth-child(2) {
+        transform: rotateY(90deg);
+    transition: all 0.6s ease;
+
+    }
+    .app-header.menu-open .bar:last-child {
+        background: #61dafb;
+        transform: translateY(-7px) rotate(-45deg);
+        transition: all 0.6s ease;
+
+    }
+
+    .app-header .mobile-menu{
+        display: none;
+        opacity: 0;
+        transform: translateX(500px);
+        transition: all 0.6s ease;
+        padding: 30px;
+    }
+    .app-header.menu-open .mobile-menu{
+        display: block;
+        opacity: 1;
+        background-color: #fff;
+        width: 100%;
+        height: 100vh;
+        transform: translateX(0);
+    }
+    .mobile-menu .login-button{
+        color: #61dafb;
+    }
+
+    .search-bar{
+        max-width: 320px;
+        margin-bottom: 20px;
+    }
 }

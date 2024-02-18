@@ -9,6 +9,7 @@ const Header = () => {
   const user = useSelector((state) => state.user.user);
   console.log({user})
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     // Check for the username in localStorage when the component mounts
@@ -29,11 +30,46 @@ const Header = () => {
     navigate('/');
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+
   return (
-    <header className="app-header">
+    <header className={`app-header ${isMenuOpen ? 'menu-open' : ''}`}>
+      <div className="menu-wrapper">
       <div className="logo">
         <Link to="/">SkillSwap</Link>
       </div>
+      <form className="search main-menu" onSubmit={handleSearch}>
+        <input
+          type="text"
+          placeholder="Search skills"
+          className="search-bar"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </form>
+      <div className="login-signup main-menu">
+        {loggedInUser ? (
+          <>
+            <button onClick={handleLogout} className="signup-button">Logout</button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="login-button">Log in</Link>
+            <Link to="/register" className="signup-button">Sign up</Link>
+          </>
+        )}
+      </div>
+      <div className="menu-bar" onClick={toggleMenu}>
+        <span className='bar'></span>
+        <span className='bar'></span>
+        <span className='bar'></span>
+      </div>
+     
+      </div>
+      <div className='mobile-menu'>
       <form className="search" onSubmit={handleSearch}>
         <input
           type="text"
@@ -50,10 +86,11 @@ const Header = () => {
           </>
         ) : (
           <>
-            <Link to="/login" className="login-button">Log in</Link>
-            <Link to="/register" className="signup-button">Sign up</Link>
+            <Link to="/login" className="login-button" onClick={toggleMenu}>Log in</Link>
+            <Link to="/register" className="signup-button" onClick={toggleMenu}>Sign up</Link>
           </>
         )}
+      </div>
       </div>
     </header>
   );
