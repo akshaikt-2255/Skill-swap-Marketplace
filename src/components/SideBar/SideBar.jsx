@@ -11,7 +11,7 @@ const Sidebar = ({ isOpen, toggleSidebar, handleLogout }) => {
       </button>
     </div>
     <div className="sidebar-links">
-        <Link to="/profile" onClick={toggleSidebar}>Profile</Link>
+        <Link to="/profile" onClick={toggleSidebar}>View Profile</Link>
         <Link to="/settings" onClick={toggleSidebar}>Settings</Link>
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </div>

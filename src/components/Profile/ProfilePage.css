@@ -1,0 +1,62 @@
+/* ProfilePage.css */
+.profile-page {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* ProfileHeader.css */
+.profile-header {
+    display: flex;
+    align-items: center;
+}
+
+.profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.profile-name {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.profile-status {
+    margin: 5px 0;
+    color: #666;
+    font-size: 1rem;
+}
+
+/* ProfileDetails.css */
+.profile-details {
+    margin-top: 20px;
+}
+
+.profile-bio,
+.profile-contact {
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* ProfileSkills.css */
+.profile-skills {
+    margin-top: 20px;
+}
+
+.skills-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.submit {
+    margin-top: 24px;
+    background-color: #61dafb;
+    color: white;
+  }
+
+.skills-list li {
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 1rem;
+}
