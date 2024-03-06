@@ -4,30 +4,43 @@ const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        default: () => new mongoose.Types.ObjectId()
+        default: () => new mongoose.Types.ObjectId(),
     },
     username: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     password: {
         type: String,
-        required: true
+        required: true,
     },
     profilePicture: {
         type: String,
-        default: ''
+        default: '',
     },
     bio: {
         type: String,
-        default: ''
-    }
+        default: '',
+    },
+    interests: [{
+        type: String,
+    }],
+    gender: {
+        type: String,
+        required: true,
+        enum: ['male', 'female', 'other'],
+    },
+    primarySkill: {
+        type: String,
+        required: false,
+        default: '',
+    },
 }, { timestamps: true });
 
 // Password hashing middleware

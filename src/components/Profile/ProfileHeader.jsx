@@ -36,7 +36,7 @@ const ProfileHeader = () => {
         </Typography>
       </Box>
       <Link
-        to="/edit-profile"
+        to="/editprofile"
         style={{ textDecoration: "none", marginTop: "30px" }}
       >
         <Button
