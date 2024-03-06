@@ -34,6 +34,21 @@ const getUserApi = async (userData) => {
   return await response.json();
 };
 
+const updateUserApi = async (userData) => {
+  const response = await fetch('http://localhost:4000/api/auth/updateUser', {
+    method: 'PUT', 
+    body: userData,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Could not update user');
+  }
+
+  return await response.json();
+};
+
+
 export const createUser = createAsyncThunk(
   'user/createUser',
   async (userData, { rejectWithValue }) => {
@@ -71,3 +86,16 @@ export const getUser = createAsyncThunk(
     }
   }
 );
+
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await updateUserApi(userData);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Could not update user');
+    }
+  }
+);
+

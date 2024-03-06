@@ -66,13 +66,23 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // Log the error for debugging purposes
+  console.error(err);
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  if (err.status === 404) {
+    return res.status(404).json({ message: 'Not Found' });
+  }
+
+  // Handle unauthorized errors
+  if (err.name === 'UnauthorizedError') {
+    return res.status(401).json({ message: 'You are not authorized to access this resource' });
+  }
+
+  // Handle all other errors
+  const status = err.status || 500;
+  const message = req.app.get('env') === 'development' ? err.message : 'Internal Server Error';
+
+  res.status(status).json({ error: message });
 });
 
 module.exports = app;
