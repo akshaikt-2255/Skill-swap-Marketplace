@@ -4,8 +4,9 @@ import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import profilePicture from "../../assets/profile.jpg";
 import { Button } from "@mui/material";
+import { getImageUrl } from "../../utils";
 
-const ProfileHeader = () => {
+const ProfileHeader = ({user}) => {
   return (
     <Box
       sx={{
@@ -17,7 +18,12 @@ const ProfileHeader = () => {
     >
       <Avatar
         alt="Profile Picture"
-        src={profilePicture}
+        src={
+          user?.profilePicture &&
+          (typeof user?.profilePicture === "string"
+            ? getImageUrl(user.profilePicture)
+            : URL.createObjectURL(user.profilePicture))
+        }
         sx={{ width: 300, height: 300, mb: 1 }}
       />
       <Box sx={{ mt: 2, textAlign: "center" }}>
@@ -26,13 +32,10 @@ const ProfileHeader = () => {
           component="div"
           sx={{ fontWeight: "bold", mb: 1 }}
         >
-          John Doe
-        </Typography>
-        <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
-          Web Developer
+          {user?.name}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          Primary Skill: React
+          Primary Skill: {user?.primarySkill}
         </Typography>
       </Box>
       <Link

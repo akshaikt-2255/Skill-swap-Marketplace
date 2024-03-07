@@ -15,10 +15,13 @@ import {
   Chip,
   IconButton,
   Avatar,
+  Snackbar,
+  SnackbarContent,
 } from "@mui/material";
 import { PhotoCamera, Close } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../data/reducer/api/userThunk";
+import UpdatePassword from "./ChangePassword";
 
 const allInterests = ["music", "sports", "movies", "technology", "travel"];
 
@@ -40,6 +43,7 @@ const EditProfile = () => {
   });
   const [availableInterests, setAvailableInterests] = useState(allInterests);
   const [selectedInterests, setSelectedInterests] = useState([]);
+  const [isError,setIsError] = useState(false);
 
   useEffect(() => {
     const updatedAllInterests = allInterests.filter(
@@ -48,11 +52,8 @@ const EditProfile = () => {
     setAvailableInterests(updatedAllInterests);
   }, [selectedInterests]);
 
-  const [password, setPassword] = useState({
-    oldPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const handleInputChange = (e) => {
     if (e.target.name === "image") {
@@ -63,8 +64,14 @@ const EditProfile = () => {
     }
   };
 
-  const handlePasswordChange = (e) => {
-    setPassword({ ...password, [e.target.name]: e.target.value });
+  const handleSnackbarOpen = (message, isError) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+    setIsError(!!isError)
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   const handleInterestAdd = (event) => {
@@ -97,7 +104,9 @@ const EditProfile = () => {
   formData.append("interests", selectedInterests);
 
   const result = await dispatch(updateUser(formData));
-  console.log({result})
+  if (result?.payload) {
+    handleSnackbarOpen(result?.payload?.message);
+  }
   };
   return (
     <Box sx={{ width: "100%", display: "flex" }}>
@@ -111,7 +120,7 @@ const EditProfile = () => {
         <Tab label="Edit Profile" />
         <Tab label="Change Password" />
       </Tabs>
-      <Box sx={{ p: 3, flexGrow: 1 }}>
+      <Box sx={{ p: 3}}>
         {value === 0 && (
           <Box>
             <Typography variant="h5">Edit Profile</Typography>
@@ -257,6 +266,32 @@ const EditProfile = () => {
           </Box>
         )}
       </Box>
+      <Box sx={{ p: 3 }}>
+        {value === 1 && (
+           <UpdatePassword handleSnackBarOpen={handleSnackbarOpen} />
+        )}
+      </Box>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <SnackbarContent
+          message={snackbarMessage}
+          style={{ backgroundColor: `${isError ? 'red': 'green'}` }}
+          action={
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleSnackbarClose}
+            >
+              <Close fontSize="small" />
+            </IconButton>
+          }
+        />
+      </Snackbar>
     </Box>
   );
 };

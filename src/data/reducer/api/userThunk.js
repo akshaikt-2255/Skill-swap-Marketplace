@@ -48,6 +48,23 @@ const updateUserApi = async (userData) => {
   return await response.json();
 };
 
+const checkUserPassword = async (userData) => {
+  const response = await fetch('http://localhost:4000/api/auth/checkPassword', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userData),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Password check failed');
+  }
+
+  return await response.json();
+};
+
 
 export const createUser = createAsyncThunk(
   'user/createUser',
@@ -75,7 +92,7 @@ export const getUser = createAsyncThunk(
         localStorage.setItem('token', response.token);
         localStorage.setItem('username', response.username);
         return {
-          username: response.username,
+          user: response.user,
         }
       } else {
         console.log("error")
@@ -95,6 +112,18 @@ export const updateUser = createAsyncThunk(
       return response;
     } catch (error) {
       return rejectWithValue(error.message || 'Could not update user');
+    }
+  }
+);
+
+export const checkUserPasswordThunk = createAsyncThunk(
+  'user/checkPassword',
+  async (userData, thunkAPI) => {
+    try {
+      const {isPasswordCorrect} = await checkUserPassword(userData);
+      return { userData, isPasswordCorrect };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.error || 'Password check failed');
     }
   }
 );

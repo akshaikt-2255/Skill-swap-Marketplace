@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { createUser, getUser } from './api/userThunk';
 
 const initialState = {
-  user: null, 
+  user: null,
   status: 'idle',
   error: null,
 };
