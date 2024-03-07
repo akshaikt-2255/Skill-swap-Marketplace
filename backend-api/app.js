@@ -42,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize()); // Initialize Passport middleware
 app.use(cors(corsOptions));
 app.use(sanitizeAll);
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)

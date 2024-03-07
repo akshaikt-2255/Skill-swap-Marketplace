@@ -4,6 +4,7 @@ import "./Header.css";
 import { useSelector } from "react-redux";
 import SideBar from "../SideBar/SideBar";
 import { Avatar } from "@mui/material";
+import { getImageUrl } from "../../utils";
 
 const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -18,7 +19,7 @@ const Header = () => {
     // Check for the username in localStorage when the component mounts
     const isUser = localStorage.getItem("username");
     if (isUser && user) {
-      setLoggedInUser(user?.username);
+      setLoggedInUser(user?.user?.username);
     }
   }, [user]);
 
@@ -29,6 +30,7 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("username");
+    localStorage.removeItem("token");
     setLoggedInUser(null);
     toggleSidebar();
     navigate("/");
@@ -41,7 +43,6 @@ const Header = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  console.log({isSidebarOpen})
   return (
     <header className={`app-header ${isMenuOpen ? "menu-open" : ""}`}>
       <div className="menu-wrapper">
@@ -60,7 +61,15 @@ const Header = () => {
         <div className="login-signup main-menu">
           {loggedInUser ? (
             <div className="user-avatar" onClick={toggleSidebar}>
-              <Avatar src={''} alt="Avatar" />
+              <Avatar
+                src={
+                  user?.user?.profilePicture &&
+                  (typeof user?.user?.profilePicture === "string"
+                    ? getImageUrl(user?.user?.profilePicture)
+                    : URL.createObjectURL(user?.user?.profilePicture))
+                }
+                alt="Avatar"
+              />
             </div>
           ) : (
             <>

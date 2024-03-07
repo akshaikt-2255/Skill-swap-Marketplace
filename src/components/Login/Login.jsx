@@ -69,7 +69,7 @@ const Login = () => {
         setIsError(true);
         handleSnackbarOpen(errorMessage);
       } else {
-        const user = actionResult.payload.username;
+        const user = actionResult.payload.user;
         setIsError(false);
         if (user) {
           handleSnackbarOpen("Logged in successfully");

@@ -65,16 +65,24 @@ router.post("/login", async (req, res) => {
       { expiresIn: process.env.JWT_EXPIRES_IN || "1h" } // Default to 1 hour
     );
 
-    res.json({ token, username: user.username });
+    res.json({ token, username: user.username, user: user });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
   }
 });
 
-router.put("/updateUser",upload.single('profilePicture'), async (req, res) => {
-    const { username, email, primarySkill, bio, gender, interests } = req.body;
-  console.log(req.body)
+router.put("/updateUser", upload.single("profilePicture"), async (req, res) => {
+  const {
+    username,
+    name,
+    email,
+    primarySkill,
+    bio,
+    gender,
+    interests,
+    newPassword,
+  } = req.body;
   try {
     let user = await User.findOne({ username });
     if (!user) {
@@ -82,17 +90,21 @@ router.put("/updateUser",upload.single('profilePicture'), async (req, res) => {
     }
 
     const update = {
+      ...(name && { name }),
       ...(email && { email }),
       ...(primarySkill && { primarySkill }),
       ...(bio && { bio }),
       ...(gender && { gender }),
-      ...(interests && { interests: interests.split(',') }),
+      ...(interests && { interests: interests.split(",") }),
     };
+    if (newPassword) {
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      update.password = hashedPassword;
+    }
 
     if (req.file) {
       update.profilePicture = req.file.path;
     }
-
     await User.findOneAndUpdate({ username }, { $set: update }, { new: true });
 
     res.json({ message: "User updated successfully." });
@@ -102,7 +114,22 @@ router.put("/updateUser",upload.single('profilePicture'), async (req, res) => {
   }
 });
 
-  
+router.post("/checkPassword", async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    return res.status(200).json({ isPasswordCorrect });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error." });
+  }
+});
 
 // Protected route
 router.get(

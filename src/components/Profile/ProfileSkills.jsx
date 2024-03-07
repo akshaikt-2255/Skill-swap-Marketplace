@@ -1,8 +1,7 @@
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 
-const ProfileSkills = () => {
-  const skills = ['Javascript', 'Painting', 'Travelling', 'Baking'];
+const ProfileSkills = ({user}) => {
 
   return (
     <div>
@@ -10,7 +9,7 @@ const ProfileSkills = () => {
         My Interests
       </Typography>
       <div>
-        {skills.map((skill, index) => (
+        {user?.interests.map((skill, index) => (
           <Chip key={index} label={skill} sx={{ margin: 0.5, backgroundColor: '#f0f0f0', color: '#333' }} />
         ))}
       </div>

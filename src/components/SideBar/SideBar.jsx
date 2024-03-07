@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import './SideBar.css'
 
 const Sidebar = ({ isOpen, toggleSidebar, handleLogout }) => {
-    console.log({isOpen})
   return (
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>
     <div className="sidebar-header">
