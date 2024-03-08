@@ -113,4 +113,13 @@
         max-width: 320px;
         margin-bottom: 20px;
     }
+
+    .profile-logout-wrapper {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .profile-logout-wrapper > * {
+        margin-bottom: 10px;
+      }
 }

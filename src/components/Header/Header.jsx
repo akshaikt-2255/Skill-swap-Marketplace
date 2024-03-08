@@ -10,7 +10,6 @@ const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loggedInUser, setLoggedInUser] = useState(null);
   const user = useSelector((state) => state.user.user);
-  console.log({ user });
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -19,7 +18,7 @@ const Header = () => {
     // Check for the username in localStorage when the component mounts
     const isUser = localStorage.getItem("username");
     if (isUser && user) {
-      setLoggedInUser(user?.user?.username);
+      setLoggedInUser(user?.username);
     }
   }, [user]);
 
@@ -63,10 +62,10 @@ const Header = () => {
             <div className="user-avatar" onClick={toggleSidebar}>
               <Avatar
                 src={
-                  user?.user?.profilePicture &&
-                  (typeof user?.user?.profilePicture === "string"
-                    ? getImageUrl(user?.user?.profilePicture)
-                    : URL.createObjectURL(user?.user?.profilePicture))
+                  user?.profilePicture &&
+                  (typeof user?.profilePicture === "string"
+                    ? getImageUrl(user?.profilePicture)
+                    : URL.createObjectURL(user?.profilePicture))
                 }
                 alt="Avatar"
               />
@@ -105,11 +104,14 @@ const Header = () => {
         </form>
         <div className="login-signup">
           {loggedInUser ? (
-            <>
+            <div className="profile-logout-wrapper">
+              <Link to="/profile" onClick={toggleMenu}>
+                <button className="signup-button">View Profile</button>
+              </Link>
               <button onClick={handleLogout} className="signup-button">
                 Logout
               </button>
-            </>
+            </div>
           ) : (
             <>
               <Link to="/login" className="login-button" onClick={toggleMenu}>
