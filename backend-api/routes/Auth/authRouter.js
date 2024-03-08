@@ -89,13 +89,17 @@ router.put("/updateUser", upload.single("profilePicture"), async (req, res) => {
       return res.status(404).json({ message: "User not found." });
     }
 
+    const newInterests = interests ? interests.split(",") : [];
+   
+    const updatedInterests = newInterests.filter((interest) => !user.interests.includes(interest));
+    const combinedInterests = [...user.interests, ...updatedInterests];
     const update = {
       ...(name && { name }),
       ...(email && { email }),
       ...(primarySkill && { primarySkill }),
       ...(bio && { bio }),
       ...(gender && { gender }),
-      ...(interests && { interests: interests.split(",") }),
+      ...(interests && { interests: combinedInterests }),
     };
     if (newPassword) {
       const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -106,8 +110,8 @@ router.put("/updateUser", upload.single("profilePicture"), async (req, res) => {
       update.profilePicture = req.file.path;
     }
     await User.findOneAndUpdate({ username }, { $set: update }, { new: true });
-
-    res.json({ message: "User updated successfully." });
+    const updatedUser = await User.findOne({ username });
+    res.json({ message: "User updated successfully.",user: updatedUser});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error." });

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createUser, getUser } from './api/userThunk';
+import { createUser, getUser,updateUser } from './api/userThunk';
 
 const initialState = {
   user: null,
@@ -38,13 +38,29 @@ const userSlice = createSlice({
       state.error = null;
     });
     builder.addCase(getUser.fulfilled, (state, action) => {
-      state.user = action.payload;
+      state.user = action.payload.user;
       state.status = 'succeeded';
       state.error = null;
     });
     builder.addCase(getUser.rejected, (state, action) => {
       state.status = 'failed';
       state.error = action.payload || 'Could not fetch user';
+    });
+
+    builder.addCase(updateUser.pending, (state) => {
+      state.status = 'loading';
+    });
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.user = {
+        ...state.user,
+        ...action.payload?.user,
+      };
+      state.status = 'succeeded';
+      state.error = null;
+    });
+    builder.addCase(updateUser.rejected, (state, action) => {
+      state.status = 'failed';
+      state.error = action.payload || 'Could not update user';
     });
   },
 });

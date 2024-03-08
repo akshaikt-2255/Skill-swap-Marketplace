@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Tab,
@@ -6,8 +6,8 @@ import {
   Typography,
   TextField,
   FormControl,
-  Radio,
   RadioGroup,
+  Radio,
   FormControlLabel,
   Button,
   Select,
@@ -17,19 +17,25 @@ import {
   Avatar,
   Snackbar,
   SnackbarContent,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import { PhotoCamera, Close } from "@mui/icons-material";
+import { PhotoCamera, Close, AccountCircle, VpnKey } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../data/reducer/api/userThunk";
 import UpdatePassword from "./ChangePassword";
-
+import { useNavigate } from "react-router-dom";
 const allInterests = ["music", "sports", "movies", "technology", "travel"];
 
 const EditProfile = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [value, setValue] = useState(0);
   const username = localStorage.getItem("username");
-  
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -43,7 +49,7 @@ const EditProfile = () => {
   });
   const [availableInterests, setAvailableInterests] = useState(allInterests);
   const [selectedInterests, setSelectedInterests] = useState([]);
-  const [isError,setIsError] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const updatedAllInterests = allInterests.filter(
@@ -67,7 +73,7 @@ const EditProfile = () => {
   const handleSnackbarOpen = (message, isError) => {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
-    setIsError(!!isError)
+    setIsError(!!isError);
   };
 
   const handleSnackbarClose = () => {
@@ -93,48 +99,71 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-  const formData = new FormData();
-  formData.append("name", profile.name);
-  formData.append("username", username);
-  formData.append("email", profile.email);
-  formData.append("primarySkill", profile.primarySkill);
-  formData.append("bio", profile.bio);
-  formData.append("gender", profile.gender);
-  formData.append("profilePicture", profile.image);
-  formData.append("interests", selectedInterests);
+    const formData = new FormData();
+    formData.append("name", profile.name);
+    formData.append("username", username);
+    formData.append("email", profile.email);
+    formData.append("primarySkill", profile.primarySkill);
+    formData.append("bio", profile.bio);
+    formData.append("gender", profile.gender);
+    formData.append("profilePicture", profile.image);
+    formData.append("interests", selectedInterests);
 
-  const result = await dispatch(updateUser(formData));
-  if (result?.payload) {
-    handleSnackbarOpen(result?.payload?.message);
-  }
+    const result = await dispatch(updateUser(formData));
+    if (result?.payload) {
+      handleSnackbarOpen(result?.payload?.message);
+      setTimeout(() => {
+        navigate("/profile");
+      }, 1000);
+    }
   };
   return (
-    <Box sx={{ width: "100%", display: "flex" }}>
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        flexDirection: isMobile ? "column" : "row",
+      }}
+    >
       <Tabs
-        orientation="vertical"
+        orientation={isMobile ? "horizontal" : "vertical"}
         variant="scrollable"
+        scrollButtons="auto"
         value={value}
         onChange={handleChange}
-        sx={{ borderRight: 1, borderColor: "divider" }}
+        sx={{
+          borderRight: 1,
+          borderColor: "divider",
+          [theme.breakpoints.down("sm")]: {
+            borderBottom: 1,
+            borderRight: "none",
+          },
+        }}
       >
-        <Tab label="Edit Profile" />
-        <Tab label="Change Password" />
+        <Tab
+          icon={isMobile ? <AccountCircle /> : null}
+          label={!isMobile ? "Edit Profile" : ""}
+        />
+        <Tab
+          icon={isMobile ? <VpnKey /> : null}
+          label={!isMobile ? "Change Password" : ""}
+        />
       </Tabs>
-      <Box sx={{ p: 3}}>
+      <Box sx={{ p: 3, width: isMobile ? "100%" : "calc(100% - 160px)" }}>
         {value === 0 && (
           <Box>
             <Typography variant="h5">Edit Profile</Typography>
             {profile.image ? (
               <Avatar
-              alt="Profile Picture"
-              src={
-                profile.image &&
-                (typeof profile.image === "string"
-                  ? ''
-                  : URL.createObjectURL(profile.image))
-              }
-              sx={{ width: 100, height: 100 }}
-            />
+                alt="Profile Picture"
+                src={
+                  profile.image &&
+                  (typeof profile.image === "string"
+                    ? ""
+                    : URL.createObjectURL(profile.image))
+                }
+                sx={{ width: 100, height: 100 }}
+              />
             ) : (
               <IconButton
                 color="primary"
@@ -268,7 +297,7 @@ const EditProfile = () => {
       </Box>
       <Box sx={{ p: 3 }}>
         {value === 1 && (
-           <UpdatePassword handleSnackBarOpen={handleSnackbarOpen} />
+          <UpdatePassword handleSnackBarOpen={handleSnackbarOpen} />
         )}
       </Box>
       <Snackbar
@@ -279,7 +308,7 @@ const EditProfile = () => {
       >
         <SnackbarContent
           message={snackbarMessage}
-          style={{ backgroundColor: `${isError ? 'red': 'green'}` }}
+          style={{ backgroundColor: `${isError ? "red" : "green"}` }}
           action={
             <IconButton
               size="small"

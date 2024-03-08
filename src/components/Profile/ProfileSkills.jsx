@@ -2,7 +2,6 @@ import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 
 const ProfileSkills = ({user}) => {
-
   return (
     <div>
       <Typography variant="h5" sx={{ mt: 3, mb: 2 }}>
