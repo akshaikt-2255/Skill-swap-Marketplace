@@ -59,19 +59,27 @@ const Header = () => {
         </form>
         <div className="login-signup main-menu">
           {loggedInUser ? (
-            <div className="user-avatar" onClick={toggleSidebar}>
-              <Avatar
-                src={
-                  user?.profilePicture &&
-                  (typeof user?.profilePicture === "string"
-                    ? getImageUrl(user?.profilePicture)
-                    : URL.createObjectURL(user?.profilePicture))
-                }
-                alt="Avatar"
-              />
-            </div>
+            <>
+              <Link to="/skills" className="login-button">
+                Browse Skills
+              </Link>
+              <div className="user-avatar" onClick={toggleSidebar}>
+                <Avatar
+                  src={
+                    user?.profilePicture &&
+                    (typeof user?.profilePicture === "string"
+                      ? getImageUrl(user?.profilePicture)
+                      : URL.createObjectURL(user?.profilePicture))
+                  }
+                  alt="Avatar"
+                />
+              </div>
+            </>
           ) : (
             <>
+              <Link to="/skills" className="login-button">
+                Browse Skills
+              </Link>
               <Link to="/login" className="login-button">
                 Log in
               </Link>
@@ -105,15 +113,21 @@ const Header = () => {
         <div className="login-signup">
           {loggedInUser ? (
             <div className="profile-logout-wrapper">
+              <Link to="/skills" className="login-button" onClick={toggleMenu}>
+                Browse Skills
+              </Link>
               <Link to="/profile" onClick={toggleMenu}>
-                <button className="signup-button">View Profile</button>
+                <button className="login-button" >View Profile</button>
               </Link>
               <button onClick={handleLogout} className="signup-button">
                 Logout
               </button>
             </div>
           ) : (
-            <>
+            <div className="profile-logout-wrapper">
+              <Link to="/skills" className="login-button" onClick={toggleMenu}>
+                Browse Skills
+              </Link>
               <Link to="/login" className="login-button" onClick={toggleMenu}>
                 Log in
               </Link>
@@ -124,7 +138,7 @@ const Header = () => {
               >
                 Sign up
               </Link>
-            </>
+            </div>
           )}
         </div>
       </div>

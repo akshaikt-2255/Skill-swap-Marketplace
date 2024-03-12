@@ -12,6 +12,7 @@ const ErrorPage = lazy(() => import('./components/ErrorPage/Error'));
 const AboutUs = lazy(() => import('./components/About/AboutUs'));
 const ProfilePage = lazy( ()=> import("./components/Profile/ProfilePage"));
 const EditProfile = lazy( ()=> import("./components/EditProfile/EditProfile"));
+const SkillsPage = lazy( ()=> import("./components/Skills/SkillsList"));
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="/about" element={<AboutUs />} />
             <Route  path="/profile" element={<ProfilePage />}/>
             <Route  path="/editprofile" element={<EditProfile />}/>
+            <Route  path="/skills" element={<SkillsPage />}/>
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </main>

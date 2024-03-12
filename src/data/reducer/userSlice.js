@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createUser, getUser,updateUser } from './api/userThunk';
+import { createUser, getUser,updateUser,fetchUsersWithSkills } from './api/userThunk';
 
 const initialState = {
   user: null,
+  usersWithSkills: [],
   status: 'idle',
   error: null,
 };
@@ -32,7 +33,6 @@ const userSlice = createSlice({
       state.status = 'failed';
       state.error = action.error.message || 'Could not create user';
     });
-    // Handle getUser
     builder.addCase(getUser.pending, (state) => {
       state.status = 'loading';
       state.error = null;
@@ -61,6 +61,19 @@ const userSlice = createSlice({
     builder.addCase(updateUser.rejected, (state, action) => {
       state.status = 'failed';
       state.error = action.payload || 'Could not update user';
+    });
+    builder.addCase(fetchUsersWithSkills.pending, (state) => {
+      state.status = 'loading';
+      state.error = null;
+    });
+    builder.addCase(fetchUsersWithSkills.fulfilled, (state, action) => {
+      state.usersWithSkills = action.payload;
+      state.status = 'succeeded';
+      state.error = null;
+    });
+    builder.addCase(fetchUsersWithSkills.rejected, (state, action) => {
+      state.status = 'failed';
+      state.error = action.error.message || 'Could not fetch users with skills';
     });
   },
 });
