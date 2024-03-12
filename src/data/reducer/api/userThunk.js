@@ -65,6 +65,22 @@ const checkUserPassword = async (userData) => {
   return await response.json();
 };
 
+const fetchUsersWithSkillsApi = async () => {
+  const response = await fetch('http://localhost:4000/api/auth/skills', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Could not fetch users with skills');
+  }
+
+  return await response.json();
+};
+
 
 export const createUser = createAsyncThunk(
   'user/createUser',
@@ -127,4 +143,17 @@ export const checkUserPasswordThunk = createAsyncThunk(
     }
   }
 );
+
+export const fetchUsersWithSkills = createAsyncThunk(
+  'users/fetchUsersWithSkills',
+  async (_, { rejectWithValue }) => {
+    try {
+      const users = await fetchUsersWithSkillsApi();
+      return users;
+    } catch (error) {
+      return rejectWithValue(error.message || 'Could not fetch users with skills');
+    }
+  }
+);
+
 

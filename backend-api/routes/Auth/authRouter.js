@@ -135,6 +135,23 @@ router.post("/checkPassword", async (req, res) => {
   }
 });
 
+
+router.get("/skills", async (req, res) => {
+  try {
+    // Find users where primarySkill field exists and is not null
+    const users = await User.find({ primarySkill: { $exists: true, $ne: null } });
+    console.log({users})
+    if (!users.length) {
+      return res.status(404).json({ message: "No users found with a primary skill." });
+    }
+
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+});
+
 // Protected route
 router.get(
   "/test",

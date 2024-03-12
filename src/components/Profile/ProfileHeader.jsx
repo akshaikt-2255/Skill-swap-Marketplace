@@ -2,7 +2,6 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
-import profilePicture from "../../assets/profile.jpg";
 import { Button } from "@mui/material";
 import { getImageUrl } from "../../utils";
 
