@@ -1,159 +1,333 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const createUserApi = async (userData) => {
-  const response = await fetch('http://localhost:4000/api/auth/register', {
-    method: 'POST',
+  const response = await fetch("http://localhost:4000/api/auth/register", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(userData),
   });
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.log({errorData})
-    throw new Error(errorData.message || 'Could not create user');
+    console.log({ errorData });
+    throw new Error(errorData.message || "Could not create user");
   }
 
   return await response.json();
 };
 
 const getUserApi = async (userData) => {
-  const response = await fetch('http://localhost:4000/api/auth/login', {
-    method: 'POST',
+  const response = await fetch("http://localhost:4000/api/auth/login", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(userData),
   });
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || 'Login failed');
+    throw new Error(errorData.message || "Login failed");
   }
 
   return await response.json();
 };
 
 const updateUserApi = async (userData) => {
-  const response = await fetch('http://localhost:4000/api/auth/updateUser', {
-    method: 'PUT', 
+  const response = await fetch("http://localhost:4000/api/auth/updateUser", {
+    method: "PUT",
     body: userData,
   });
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || 'Could not update user');
+    throw new Error(errorData.message || "Could not update user");
   }
 
   return await response.json();
 };
 
 const checkUserPassword = async (userData) => {
-  const response = await fetch('http://localhost:4000/api/auth/checkPassword', {
-    method: 'POST',
+  const response = await fetch("http://localhost:4000/api/auth/checkPassword", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(userData),
   });
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.error || 'Password check failed');
+    throw new Error(errorData.error || "Password check failed");
   }
 
   return await response.json();
 };
 
 const fetchUsersWithSkillsApi = async () => {
-  const response = await fetch('http://localhost:4000/api/auth/skills', {
-    method: 'GET',
+  const response = await fetch("http://localhost:4000/api/auth/skills", {
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
   });
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || 'Could not fetch users with skills');
+    throw new Error(errorData.message || "Could not fetch users with skills");
   }
 
   return await response.json();
 };
 
+const followUserApi = async (currentUserId, followUserId) => {
+  const response = await fetch("http://localhost:4000/api/auth/follow", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+    body: JSON.stringify({
+      currentUserId,
+      followId: followUserId,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Could not follow the user");
+  }
+
+  return await response.json();
+};
+
+export const getConversations = async (conversationId) => {
+  try {
+    const response = await fetch(
+      `http://localhost:4000/api/auth/conversations/${conversationId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.json();
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};
+
+export const getUsernameById = async (userId) => {
+  try {
+    const response = await fetch(
+      `http://localhost:4000/api/auth/username/${userId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.json();
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};
+
+export const getUsernameByEmail = async (email) => {
+  try {
+    const response = await fetch("http://localhost:4000/api/auth/username", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(email),
+    });
+    return response.json();
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};
+
+export const getUserById = async (userId) => {
+  try {
+    const response = await fetch(
+      `http://localhost:4000/api/auth/user/id/${userId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.json();
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};
+
+export const getUsers = async () => {
+  try {
+    const response = await fetch(`http://localhost:4000/api/auth/users`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.json();
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};
 
 export const createUser = createAsyncThunk(
-  'user/createUser',
+  "user/createUser",
   async (userData, { rejectWithValue }) => {
     try {
-      console.log({userData})
+      console.log({ userData });
       const response = await createUserApi(userData);
-      console.log({response})
-      return response.data; 
+      console.log({ response });
+      return response.data;
     } catch (error) {
-      console.log({error})
-      return rejectWithValue(error.message || 'Could not create user');
+      console.log({ error });
+      return rejectWithValue(error.message || "Could not create user");
     }
   }
 );
 
-
 export const getUser = createAsyncThunk(
-  'user/getUser',
+  "user/getUser",
   async (userData, { rejectWithValue }) => {
     try {
       const response = await getUserApi(userData);
-      console.log({response})
+      console.log({ response });
       if (response.token) {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('username', response.username);
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("username", response.username);
         return {
           user: response.user,
-        }
+        };
       } else {
-        console.log("error")
-        throw new Error('Token not found in the response');
+        console.log("error");
+        throw new Error("Token not found in the response");
       }
     } catch (error) {
-      return rejectWithValue(error.message || 'Could not fetch user');
+      return rejectWithValue(error.message || "Could not fetch user");
     }
   }
 );
 
 export const updateUser = createAsyncThunk(
-  'user/updateUser',
+  "user/updateUser",
   async (userData, { rejectWithValue }) => {
     try {
       const response = await updateUserApi(userData);
       return response;
     } catch (error) {
-      return rejectWithValue(error.message || 'Could not update user');
+      return rejectWithValue(error.message || "Could not update user");
     }
   }
 );
 
 export const checkUserPasswordThunk = createAsyncThunk(
-  'user/checkPassword',
+  "user/checkPassword",
   async (userData, thunkAPI) => {
     try {
-      const {isPasswordCorrect} = await checkUserPassword(userData);
+      const { isPasswordCorrect } = await checkUserPassword(userData);
       return { userData, isPasswordCorrect };
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.error || 'Password check failed');
+      return thunkAPI.rejectWithValue(
+        error.response.data.error || "Password check failed"
+      );
     }
   }
 );
 
 export const fetchUsersWithSkills = createAsyncThunk(
-  'users/fetchUsersWithSkills',
+  "users/fetchUsersWithSkills",
   async (_, { rejectWithValue }) => {
     try {
       const users = await fetchUsersWithSkillsApi();
       return users;
     } catch (error) {
-      return rejectWithValue(error.message || 'Could not fetch users with skills');
+      return rejectWithValue(
+        error.message || "Could not fetch users with skills"
+      );
     }
   }
 );
 
+export const followUser = createAsyncThunk(
+  "users/followUser",
+  async ({ currentUserId, followUserId }, { rejectWithValue }) => {
+    try {
+      const result = await followUserApi(currentUserId, followUserId);
+      return result;
+    } catch (error) {
+      return rejectWithValue(error.message || "Could not follow the user");
+    }
+  }
+);
 
+export const getConversationsThunk = createAsyncThunk(
+  "user/getConversations",
+  async (conversationId, thunkAPI) => {
+    try {
+      const response = await getConversations(conversationId);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response.data.error || "Could not fetch conversations"
+      );
+    }
+  }
+);
+
+export const getUsernameByIdThunk = createAsyncThunk(
+  "user/getUsernameById",
+  async (userId, thunkAPI) => {
+    try {
+      const response = await getUsernameById(userId);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response.data.error || "Could not fetch username"
+      );
+    }
+  }
+);
+
+export const getUserByIdThunk = createAsyncThunk(
+  "auth/getUserById",
+  async (userId, thunkAPI) => {
+    try {
+      const response = await getUserById(userId);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response.data.error || "Could not fetch user details"
+      );
+    }
+  }
+);
+
+export const getUsersThunk = createAsyncThunk(
+  "auth/getUsers",
+  async (_, thunkAPI) => {
+    try {
+      const response = await getUsers();
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response.data.error || "Could not fetch users"
+      );
+    }
+  }
+);

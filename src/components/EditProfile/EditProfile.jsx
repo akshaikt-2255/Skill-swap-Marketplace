@@ -149,8 +149,9 @@ const EditProfile = () => {
           label={!isMobile ? "Change Password" : ""}
         />
       </Tabs>
-      <Box sx={{ p: 3, width: isMobile ? "100%" : "calc(100% - 160px)" }}>
-        {value === 0 && (
+
+      {value === 0 && (
+        <Box sx={{ p: 3, width: isMobile ? "100%" : "calc(100% - 160px)" }}>
           <Box>
             <Typography variant="h5">Edit Profile</Typography>
             {profile.image ? (
@@ -293,8 +294,9 @@ const EditProfile = () => {
               Update Profile
             </Button>
           </Box>
-        )}
-      </Box>
+        </Box>
+      )}
+
       <Box sx={{ p: 3 }}>
         {value === 1 && (
           <UpdatePassword handleSnackBarOpen={handleSnackbarOpen} />

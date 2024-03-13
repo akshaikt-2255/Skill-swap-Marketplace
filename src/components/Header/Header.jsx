@@ -119,6 +119,9 @@ const Header = () => {
               <Link to="/profile" onClick={toggleMenu}>
                 <button className="login-button" >View Profile</button>
               </Link>
+              <Link to="/chat" className="login-button" onClick={toggleMenu}>
+                Messages
+              </Link>
               <button onClick={handleLogout} className="signup-button">
                 Logout
               </button>
