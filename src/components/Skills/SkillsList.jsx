@@ -1,6 +1,9 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsersWithSkills } from "../../data/reducer/api/userThunk";
+import {
+  fetchUsersWithSkills,
+  followUser,
+} from "../../data/reducer/api/userThunk";
 import {
   Box,
   Grid,
@@ -18,6 +21,8 @@ import {
 } from "@mui/material";
 import { getImageUrl } from "../../utils";
 import nouser from "../../assets/nouser.png";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const SkillsNotFoundBanner = () => (
   <Alert severity="info">No skills found. Check back later!</Alert>
@@ -25,22 +30,48 @@ const SkillsNotFoundBanner = () => (
 
 const SkillsPage = () => {
   const dispatch = useDispatch();
-  const { usersWithSkills, status, error,user } = useSelector((state) => state.user);
+  const { usersWithSkills, status, error, user } = useSelector(
+    (state) => state.user
+  );
+  const userFollowing = user?.following;
   const currentUserId = user?._id;
-  const [skillFilter, setSkillFilter] = useState('All Skills');
+  const navigate = useNavigate();
+  const [following, setFollowing] = useState(userFollowing || []);
+  const [skillFilter, setSkillFilter] = useState("All Skills");
 
   useEffect(() => {
     dispatch(fetchUsersWithSkills());
   }, [dispatch]);
 
-  const skills = Array.from(new Set(usersWithSkills.map((user) => user.primarySkill)));
+  const skills = Array.from(
+    new Set(usersWithSkills.map((user) => user.primarySkill))
+  );
 
   const handleFilterChange = (event) => {
     setSkillFilter(event.target.value);
   };
 
-  const handleSendMessage = (personId) => {
-    console.log("Message person with id:", personId);
+  const handleFollow = async (personId) => {
+    if (!currentUserId) {
+      navigate("/login"); // Redirect to login if not logged in
+      return;
+    }
+    try {
+      // Dispatch the followUser thunk action
+      await dispatch(followUser({ currentUserId, followUserId: personId }));
+      const updatedfollowing = [...following, personId];
+      setFollowing(updatedfollowing);
+    } catch (error) {
+      console.error("Error following user:", error);
+    }
+  };
+
+  const handleSendMessage = (personName) => {
+    if (!currentUserId) {
+      navigate("/login");
+      return;
+    }
+    navigate(`/chat/${personName}/${user?.username}`);
   };
 
   if (status === "loading") {
@@ -57,7 +88,10 @@ const SkillsPage = () => {
 
   const filteredUsers = usersWithSkills
     .filter((user) => user._id !== currentUserId)
-    .filter((user) => skillFilter === 'All Skills' || user.primarySkill === skillFilter);
+    .filter(
+      (user) =>
+        skillFilter === "All Skills" || user.primarySkill === skillFilter
+    );
 
   if (filteredUsers.length === 0) {
     return <SkillsNotFoundBanner />;
@@ -65,8 +99,8 @@ const SkillsPage = () => {
 
   return (
     <Box sx={{ flexGrow: 1, p: 2 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-        <FormControl sx={{ width: '100%', maxWidth: '300px' }}>
+      <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+        <FormControl sx={{ width: "100%", maxWidth: "300px" }}>
           <InputLabel id="skill-filter-label">Filter by Skill</InputLabel>
           <Select
             labelId="skill-filter-label"
@@ -77,23 +111,39 @@ const SkillsPage = () => {
           >
             <MenuItem value="All Skills">All Skills</MenuItem>
             {skills.map((skill, index) => (
-              <MenuItem key={index} value={skill}>{skill}</MenuItem>
+              <MenuItem key={index} value={skill}>
+                {skill}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
       </Box>
 
-      <Grid container spacing={2} sx={{ display: 'flex', alignItems: 'stretch' }}>
+      <Grid
+        container
+        spacing={2}
+        sx={{ display: "flex", alignItems: "stretch" }}
+      >
         {filteredUsers.map((person) => (
-           <Grid item xs={12} sm={6} md={4} lg={3} key={person._id} sx={{ display: 'flex' }}>
-            <Card sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            key={person._id}
+            sx={{ display: "flex" }}
+          >
+            <Card
+              sx={{ width: "100%", display: "flex", flexDirection: "column" }}
+            >
               <CardMedia
                 component="img"
                 sx={{
-                    height: '350px',
-                    objectFit: 'cover',
-                    width: '100%'
-                  }}
+                  height: "350px",
+                  objectFit: "cover",
+                  width: "100%",
+                }}
                 image={
                   (person?.profilePicture &&
                     (typeof person?.profilePicture === "string"
@@ -112,18 +162,46 @@ const SkillsPage = () => {
                 </Typography>
                 {/* <Rating name="read-only" value={person.rating} readOnly /> */}
               </CardContent>
-              <CardActions sx={{ justifyContent: 'center' }}>
+              <CardActions
+                sx={{ display: "flex", justifyContent: "space-between", p: 1 }}
+              >
                 <Button
                   size="small"
                   sx={{
-                    width: "100%",
+                    flex: 1,
+                    bgcolor: following.includes(person._id)
+                      ? "grey"
+                      : "#61dafb",
+                    "&:hover": {
+                      bgcolor: following.includes(person._id)
+                        ? "grey"
+                        : "#60d0ea",
+                    },
+                    color: "#fff",
+                    ":disabled": {
+                      bgcolor: "grey",
+                      color: "white",
+                    },
+                    mr: 0.5, // add right margin to follow button
+                  }}
+                  disabled={following.includes(person._id)}
+                  onClick={() => handleFollow(person._id)}
+                >
+                  {following.includes(person._id) ? "Following" : "Follow"}
+                </Button>
+
+                <Button
+                  size="small"
+                  sx={{
+                    flex: 1,
+                    color: "#fff",
                     bgcolor: "#61dafb",
                     "&:hover": {
                       bgcolor: "#60d0ea",
-                      color: "#fff"
+                      color: "#fff",
                     },
                   }}
-                  onClick={() => handleSendMessage(person.id)}
+                  onClick={() => handleSendMessage(person.username)}
                 >
                   Message
                 </Button>

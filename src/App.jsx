@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { lazy, Suspense } from "react";
 import Loader from './components/Loader/Loader';
+import ChatWindow from './components/Chat/ChatWindow';
+import Chat from './components/Chat/Chat';
 
 const Header = lazy(() => import('./components/Header/Header'));
 const HomePage = lazy(() => import('./components/HomePage/HomePage'));
@@ -28,6 +30,8 @@ const App = () => {
             <Route  path="/profile" element={<ProfilePage />}/>
             <Route  path="/editprofile" element={<EditProfile />}/>
             <Route  path="/skills" element={<SkillsPage />}/>
+            <Route path="/chat" element={<ChatWindow />} />
+            <Route path="/chat/:sellerName/:username" element={<Chat />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </main>

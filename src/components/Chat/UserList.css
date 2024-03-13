@@ -1,0 +1,28 @@
+.userList {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.userListItem {
+    padding: 8px 12px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.userName {
+    padding-left: 20px;
+}
+
+.userListItem:hover {
+    background-color: #f0f0f0;
+}
+
+.user-container {
+    display: flex;
+    align-items: center;
+}

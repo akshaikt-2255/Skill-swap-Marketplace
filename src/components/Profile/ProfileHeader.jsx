@@ -6,6 +6,8 @@ import { Button } from "@mui/material";
 import { getImageUrl } from "../../utils";
 
 const ProfileHeader = ({user}) => {
+  const followersCount = user?.followers?.length || 0;
+  const followingCount = user?.following?.length || 0;
   return (
     <Box
       sx={{
@@ -35,6 +37,21 @@ const ProfileHeader = ({user}) => {
         </Typography>
         <Typography variant="body2" color="textSecondary">
           Primary Skill: {user?.primarySkill}
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          mt: 2,
+        }}
+      >
+        <Typography variant="subtitle1" sx={{ marginRight: 2 }}>
+          {followersCount} Followers
+        </Typography>
+        <Typography variant="subtitle1">
+          {followingCount} Following
         </Typography>
       </Box>
       <Link

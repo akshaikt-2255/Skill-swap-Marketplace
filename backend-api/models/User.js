@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
@@ -40,6 +41,20 @@ const userSchema = new mongoose.Schema({
         required: false,
         default: '',
     },
+    chatHistory: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Conversation",
+        },
+      ],
+    followers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      }],
+      following: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      }],
 }, { timestamps: true });
 
 // Password hashing middleware
