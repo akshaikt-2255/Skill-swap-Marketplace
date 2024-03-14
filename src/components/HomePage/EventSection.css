@@ -53,7 +53,8 @@
 .skill-event-hosted-by,
 .skill-event-date,
 .skill-event-attendees,
-.skill-event-price {
+.skill-event-price,
+.skill-event-link {
   font-size: 0.85rem;
   color: #666;
   margin: 0.25rem 0;

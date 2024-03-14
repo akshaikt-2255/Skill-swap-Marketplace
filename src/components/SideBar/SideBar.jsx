@@ -13,8 +13,11 @@ const Sidebar = ({ isOpen, toggleSidebar, handleLogout }) => {
         <Link to="/profile" onClick={toggleSidebar}>
           View Profile
         </Link>
-        <Link to="/settings" onClick={toggleSidebar}>
+        <Link to="/create" onClick={toggleSidebar}>
           Create Event
+        </Link>
+        <Link to="/myEvents" onClick={toggleSidebar}>
+          My Events
         </Link>
         <Link to="/chat" onClick={toggleSidebar}>
           Messages

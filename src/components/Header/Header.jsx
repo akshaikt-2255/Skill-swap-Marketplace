@@ -63,6 +63,9 @@ const Header = () => {
               <Link to="/skills" className="login-button">
                 Browse Skills
               </Link>
+              <Link to="/allEvents" className="login-button">
+                Browse Events
+              </Link>
               <div className="user-avatar" onClick={toggleSidebar}>
                 <Avatar
                   src={
@@ -79,6 +82,9 @@ const Header = () => {
             <>
               <Link to="/skills" className="login-button">
                 Browse Skills
+              </Link>
+              <Link to="/allEvents" className="login-button">
+                Browse Events
               </Link>
               <Link to="/login" className="login-button">
                 Log in
@@ -116,6 +122,12 @@ const Header = () => {
               <Link to="/skills" className="login-button" onClick={toggleMenu}>
                 Browse Skills
               </Link>
+              <Link to="/allEvents" className="login-button" onClick={toggleMenu}>
+                Browse Events
+              </Link>
+              <Link to="/create" className="login-button" onClick={toggleMenu}>
+                Create Event
+              </Link>
               <Link to="/profile" onClick={toggleMenu}>
                 <button className="login-button" >View Profile</button>
               </Link>
@@ -130,6 +142,9 @@ const Header = () => {
             <div className="profile-logout-wrapper">
               <Link to="/skills" className="login-button" onClick={toggleMenu}>
                 Browse Skills
+              </Link>
+              <Link to="/allEvents" className="login-button" onClick={toggleMenu}>
+                Browse Events
               </Link>
               <Link to="/login" className="login-button" onClick={toggleMenu}>
                 Log in
