@@ -21,7 +21,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { PhotoCamera, Close, AccountCircle, VpnKey } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../data/reducer/api/userThunk";
 import UpdatePassword from "./ChangePassword";
 import { useNavigate } from "react-router-dom";
@@ -32,6 +32,7 @@ const EditProfile = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState(0);
   const username = localStorage.getItem("username");
+  const { user} = useSelector((state) => state.user);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -42,13 +43,14 @@ const EditProfile = () => {
 
   const [profile, setProfile] = useState({
     image: "",
-    name: "",
-    email: "",
-    bio: "",
-    primarySkill: "",
+    name: user?.name || "",
+    email: user?.email || "",
+    bio: user?.bio || "",
+    primarySkill: user?.primarySkill || "",
+    gender: user?.gender || ""
   });
   const [availableInterests, setAvailableInterests] = useState(allInterests);
-  const [selectedInterests, setSelectedInterests] = useState([]);
+  const [selectedInterests, setSelectedInterests] = useState(user?.interests);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {

@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import SkillCategoriesSection from "./CategorySection";
 import SkillEventsSection from "./EventSection";
 import "./HomePage.css";
+import { useSelector } from "react-redux";
 
 const HomePage = () => {
+  const { user } = useSelector((state) => state.user);
   return (
     <div className="homepage">
       <h1 className="homepage-title">
@@ -14,7 +16,7 @@ const HomePage = () => {
         speaking, there are thousands of people who share it on SkillSwap. Swap
         skills and learn new ones every day—sign up to join the community.
       </p>
-      <button className="join-button"><Link to="/register">Join SkillSwap</Link></button>
+      {!user && <button className="join-button"><Link to="/register">Join SkillSwap</Link></button>}
 
       <SkillEventsSection />
 

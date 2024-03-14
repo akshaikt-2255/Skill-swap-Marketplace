@@ -187,6 +187,56 @@ export const getUsers = async () => {
   }
 };
 
+const createEventApi = async (eventData) => {
+  const response = await fetch("http://localhost:4000/api/events/create", {
+    method: "POST",
+    body: eventData,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Could not create event");
+  }
+
+  return await response.json();
+};
+
+const getEventsByHostIdApi = async (hostId) => {
+  const response = await fetch(`http://localhost:4000/api/events/host/${hostId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Could not fetch events for the host");
+  }
+
+  return await response.json();
+};
+
+const getAllEventsApi = async (hostId) => {
+  const response = await fetch(`http://localhost:4000/api/events/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Could not fetch events for the host");
+  }
+
+  return await response.json();
+};
+
+
+
 export const createUser = createAsyncThunk(
   "user/createUser",
   async (userData, { rejectWithValue }) => {
@@ -328,6 +378,42 @@ export const getUsersThunk = createAsyncThunk(
       return thunkAPI.rejectWithValue(
         error.response.data.error || "Could not fetch users"
       );
+    }
+  }
+);
+
+export const createEvent = createAsyncThunk(
+  "events/createEvent",
+  async (eventData, { rejectWithValue }) => {
+    try {
+      const response = await createEventApi(eventData);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message || "Could not create event");
+    }
+  }
+);
+
+export const getEventsByHostId = createAsyncThunk(
+  "events/getEventsByHostId",
+  async (hostId, { rejectWithValue }) => {
+    try {
+      const events = await getEventsByHostIdApi(hostId);
+      return events;
+    } catch (error) {
+      return rejectWithValue(error.message || "Could not fetch events for the host");
+    }
+  }
+);
+
+export const getAllEventsThunk = createAsyncThunk(
+  "events/getAllEventsThunk",
+  async (hostId, { rejectWithValue }) => {
+    try {
+      const events = await getAllEventsApi(hostId);
+      return events;
+    } catch (error) {
+      return rejectWithValue(error.message || "Could not fetch events for the host");
     }
   }
 );
