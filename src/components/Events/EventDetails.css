@@ -45,4 +45,20 @@
   .event-info-container a:hover {
     text-decoration: underline;
   }
+
+  @media (max-width: 768px) {
+    .event-details-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .event-image-container {
+      max-width: 100%;
+    }
+  
+    .event-info-container {
+      flex: unset;
+      padding: 10px;
+    }
+  }
   

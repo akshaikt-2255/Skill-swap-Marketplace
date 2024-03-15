@@ -19,7 +19,7 @@ const AllEvents = () => {
   const userEvents = user ? allEvents.filter((event) => event.host._id !== user._id) : allEvents;
   return (
     <div className="skill-events-section">
-      <h2 className="skill-events-title">My Events</h2>
+      <h2 className="skill-events-title">All Events</h2>
       <div className="skill-events-grid">
         {userEvents && userEvents.length > 0 ? (
           userEvents.map((event, index) => (
