@@ -153,7 +153,7 @@ const EditProfile = () => {
       </Tabs>
 
       {value === 0 && (
-        <Box sx={{ p: 3, width: isMobile ? "100%" : "calc(100% - 160px)" }}>
+        <Box sx={{ p: isMobile ? 0 : 3, width: isMobile ? "100%" : "calc(100% - 160px)" }}>
           <Box>
             <Typography variant="h5">Edit Profile</Typography>
             {profile.image ? (
@@ -193,6 +193,7 @@ const EditProfile = () => {
               autoComplete="name"
               value={profile.name}
               onChange={handleInputChange}
+              className="textField"
             />
             <TextField
               margin="normal"
@@ -204,6 +205,7 @@ const EditProfile = () => {
               autoComplete="email"
               value={profile.email}
               onChange={handleInputChange}
+              className="textField"
             />
             <FormControl fullWidth margin="normal">
               <TextField
@@ -212,6 +214,7 @@ const EditProfile = () => {
                 name="primarySkill"
                 value={profile.primarySkill}
                 onChange={handleInputChange}
+                className="textField"
               />
             </FormControl>
             <FormControl>
@@ -255,6 +258,7 @@ const EditProfile = () => {
                   fontSize: "1rem",
                   fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
                 }}
+                className="textField"
                 value={profile.bio}
                 onChange={handleInputChange}
               ></textarea>

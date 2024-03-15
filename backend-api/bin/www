@@ -7,7 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('backend-api:server');
 var http = require('http');
-const { Server } = require('socket.io');
+const { Server } = require('socket.io'); // socket.io for real time communication  between server and client
 const socketServer = require('../socketServer'); 
 /**
  * Get port from environment and store in Express.

@@ -16,54 +16,64 @@ const AllEvents = () => {
   }, [dispatch]);
 
   if (isLoading) return <p>Loading...</p>;
-  const userEvents = user ? allEvents.filter((event) => event.host._id !== user._id) : allEvents;
+  const userEvents = user
+    ? allEvents.filter((event) => event.host._id !== user._id)
+    : allEvents;
   return (
-    <div className="skill-events-section">
-      <h2 className="skill-events-title">All Events</h2>
-      <div className="skill-events-grid">
-        {userEvents && userEvents.length > 0 ? (
-          userEvents.map((event, index) => (
-            <Link
-              to={`/event-details/${event._id}`}
-              key={index}
-              style={{ textDecoration: "none" }}
-            >
-              <div className="skill-event-card" key={index}>
-                <img
-                  src={getImageUrl(event.eventImage) || "defaultImage.jpg"}
-                  alt={event.title}
-                  className="skill-event-image"
-                />
-                <div className="skill-event-info">
-                  <h3 className="skill-event-title">{event.title}</h3>
-                  <p className="skill-event-hosted-by">
-                    Hosted by: {event.host.name}
-                  </p>
-                  <p className="skill-event-date">
-                    {format(parseISO(event?.datetime), "MMM d, yyyy")}
-                  </p>
-                  {event.online ? (
-                    <a
-                      href={event.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="skill-event-link"
-                    >
-                      Click here for link
-                    </a>
-                  ) : (
-                    <p className="skill-event-attendees">{event.location}</p>
-                  )}
-                  <p className="skill-event-price">Free</p>
+    <>
+      <nav className="skill-events-section">
+        <Link to="/" className="breadcrumb-home">
+          Home
+        </Link>{" "}
+        / <span>Events</span>
+      </nav>
+      <div className="skill-events-section">
+        <h2 className="skill-events-title">All Events</h2>
+        <div className="skill-events-grid">
+          {userEvents && userEvents.length > 0 ? (
+            userEvents.map((event, index) => (
+              <Link
+                to={`/event-details/${event._id}`}
+                key={index}
+                style={{ textDecoration: "none" }}
+              >
+                <div className="skill-event-card" key={index}>
+                  <img
+                    src={getImageUrl(event.eventImage) || "defaultImage.jpg"}
+                    alt={event.title}
+                    className="skill-event-image"
+                  />
+                  <div className="skill-event-info">
+                    <h3 className="skill-event-title">{event.title}</h3>
+                    <p className="skill-event-hosted-by">
+                      Hosted by: {event.host.name}
+                    </p>
+                    <p className="skill-event-date">
+                      {format(parseISO(event?.datetime), "MMM d, yyyy")}
+                    </p>
+                    {event.online ? (
+                      <a
+                        href={event.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="skill-event-link"
+                      >
+                        Click here for link
+                      </a>
+                    ) : (
+                      <p className="skill-event-attendees">{event.location}</p>
+                    )}
+                    <p className="skill-event-price">Free</p>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))
-        ) : (
-          <p>No events found.</p>
-        )}
+              </Link>
+            ))
+          ) : (
+            <p>No events found.</p>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

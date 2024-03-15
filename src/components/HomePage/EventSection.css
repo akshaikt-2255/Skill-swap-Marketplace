@@ -60,6 +60,10 @@
   margin: 0.25rem 0;
 }
 
+a:hover {
+  color: #61dafb !important;
+}
+
 @media (max-width: 768px) {
   .skill-events-grid {
     grid-template-columns: 1fr;
