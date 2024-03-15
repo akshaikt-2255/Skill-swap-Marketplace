@@ -34,8 +34,19 @@ const UserList = ({ onUserSelect }) => {
       const filteredUsers = users
         .filter((u) => participantIds.includes(u.id))
         .map((u) => ({ username: u.username, name: u.name }));
-
-      setUsernames(filteredUsers);
+        setUsernames((prevUsernames) => {
+          const combinedUsernames = [...prevUsernames, ...filteredUsers];
+          const uniqueUsernames = combinedUsernames.reduce((acc, current) => {
+            const x = acc.find(item => item.username === current.username);
+            if (!x) {
+              return acc.concat([current]);
+            } else {
+              return acc;
+            }
+          }, []);
+    
+          return uniqueUsernames;
+        });
     }
   }, [conversations, users, user]);
 
