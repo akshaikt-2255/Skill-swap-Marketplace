@@ -34,7 +34,6 @@ const UserList = ({ onUserSelect }) => {
       const filteredUsers = users
         .filter((u) => participantIds.includes(u.id))
         .map((u) => ({ username: u.username, name: u.name }));
-        console.log({filteredUsers})
         setUsernames((prevUsernames) => {
           const combinedUsernames = [...prevUsernames, ...filteredUsers];
           const uniqueUsernames = combinedUsernames.reduce((acc, current) => {
@@ -96,7 +95,7 @@ const UserList = ({ onUserSelect }) => {
       // Handle the error appropriately
     }
   };
-console.log({usernames})
+
   return (
     <div className="userList">
       {usernames.map((user, index) => (
