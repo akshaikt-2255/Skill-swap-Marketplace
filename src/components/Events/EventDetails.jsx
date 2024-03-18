@@ -1,17 +1,24 @@
 // In EventDetails.js
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux"; // If you store event details in Redux
+import { useDispatch, useSelector } from "react-redux"; // If you store event details in Redux
 import { format, parseISO } from "date-fns";
 import { getImageUrl } from "../../utils";
 import "./EventDetails.css";
 import { Link } from "react-router-dom";
+import { getAllEventsThunk } from "../../data/reducer/api/userThunk";
 
 const EventDetails = () => {
+  const dispatch = useDispatch();
   const { eventId } = useParams();
   const event = useSelector((state) =>
     state.user.allEvents.find((event) => event._id === eventId)
   );
+
+  useEffect(() => {
+    dispatch(getAllEventsThunk());
+  }, [dispatch]);
+
 
   if (!event) {
     return <p>Event not found.</p>;
