@@ -12,6 +12,7 @@ import {
   createEvent,
   getEventsByHostId,
   getAllEventsThunk,
+  deleteEvent,
 } from "./api/userThunk";
 
 const initialState = {
@@ -198,6 +199,19 @@ const userSlice = createSlice({
         state.status = "failed";
         state.allEvents = [];
         state.error = action.payload || "Failed to fetch events";
+      });
+      builder
+      .addCase(deleteEvent.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteEvent.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.myEvents = state.myEvents.filter(event => event._id !== action.meta.arg);
+        state.allEvents = state.allEvents.filter(event => event._id !== action.meta.arg);
+      })
+      .addCase(deleteEvent.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to delete the event";
       });
   },
 });

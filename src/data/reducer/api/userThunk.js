@@ -235,6 +235,24 @@ const getAllEventsApi = async (hostId) => {
   return await response.json();
 };
 
+const deleteEventApi = async (eventId) => {
+  const response = await fetch(`http://localhost:4000/api/events/${eventId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Could not delete event");
+  }
+
+  return await response.json();
+};
+
+
 
 
 export const createUser = createAsyncThunk(
@@ -414,6 +432,18 @@ export const getAllEventsThunk = createAsyncThunk(
       return events;
     } catch (error) {
       return rejectWithValue(error.message || "Could not fetch events for the host");
+    }
+  }
+);
+
+export const deleteEvent = createAsyncThunk(
+  "events/deleteEvent",
+  async (eventId, { rejectWithValue }) => {
+    try {
+      const deletedEvent = await deleteEventApi(eventId);
+      return deletedEvent;
+    } catch (error) {
+      return rejectWithValue(error.message || "Could not delete event");
     }
   }
 );

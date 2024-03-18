@@ -64,6 +64,12 @@ a:hover {
   color: #61dafb !important;
 }
 
+.skill-event-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px;
+}
+
 @media (max-width: 768px) {
   .skill-events-grid {
     grid-template-columns: 1fr;
