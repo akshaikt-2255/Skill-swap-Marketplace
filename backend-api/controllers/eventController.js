@@ -112,10 +112,76 @@ const getEventsByHostId = async (req, res) => {
   }
 };
 
+const getEventById = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const event = await Event.findById(eventId)
+      .populate("host", "name")
+      .populate("attendees", "name");
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    res.status(200).json(event);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving event by ID", error });
+  }
+};
+
+const updateEvent = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const {
+      title,
+      description,
+      online,
+      link,
+      location,
+      datetime,
+      availableSlots
+    } = req.body;
+    let eventImage = req.body?.eventImage || "";
+
+    if (req.file) {
+      eventImage = req.file.path;
+    }
+
+    const isOnline = online === "true" ? true : false;
+    const loc = !isOnline ? location : null;
+    const virtualLink = isOnline ? link : null;
+    const updatedEvent = await Event.findByIdAndUpdate(
+      eventId,
+      {
+        title,
+        description,
+        eventImage,
+        online,
+        link: virtualLink,
+        location: loc,
+        datetime,
+        availableSlots,
+      },
+      { new: true }
+    );
+    if (!updatedEvent) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    res.status(200).json(updatedEvent);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating event", error });
+  }
+};
+
 module.exports = {
   createEvent,
   attendEvent,
   deleteEvent,
   getAllEvents,
   getEventsByHostId,
+  getEventById,
+  updateEvent,
 };

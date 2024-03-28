@@ -447,3 +447,60 @@ export const deleteEvent = createAsyncThunk(
     }
   }
 );
+
+
+const getEventByIdApi = async (eventId) => {
+  const response = await fetch(`http://localhost:4000/api/events/${eventId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Could not fetch event by ID");
+  }
+
+  return await response.json();
+};
+
+const updateEventApi = async (eventId, eventData) => {
+  console.log({eventData})
+  const response = await fetch(`http://localhost:4000/api/events/${eventId}`, {
+    method: "PUT",
+    body: eventData,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Could not update event");
+  }
+
+  return await response.json();
+};
+
+export const getEventById = createAsyncThunk(
+  "events/getEventById",
+  async (eventId, { rejectWithValue }) => {
+    try {
+      const event = await getEventByIdApi(eventId);
+      return event;
+    } catch (error) {
+      return rejectWithValue(error.message || "Could not fetch event");
+    }
+  }
+);
+
+export const updateEvent = createAsyncThunk(
+  "events/updateEvent",
+  async ({ eventId, formData }, { rejectWithValue }) => {
+    try {
+      console.log({formData})
+      const updatedEvent = await updateEventApi(eventId, formData);
+      return updatedEvent;
+    } catch (error) {
+      return rejectWithValue(error.message || "Could not update event");
+    }
+  }
+);
