@@ -4,13 +4,14 @@ import { deleteEvent, getEventsByHostId } from "../../data/reducer/api/userThunk
 import { getImageUrl } from "../../utils";
 import "../HomePage/EventSection.css";
 import { format, parseISO } from "date-fns";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 
 
 const MyEvents = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user, myEvents } = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,7 +31,7 @@ const MyEvents = () => {
   if (isLoading) return <p>Loading...</p>;
 
   const handleEditEvent = (eventId) => {
-    console.log(`Editing event with ID: ${eventId}`);
+    navigate(`/events/edit/${eventId}`);
   };
   
 

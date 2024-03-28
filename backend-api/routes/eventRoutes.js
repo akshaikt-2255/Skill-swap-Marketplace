@@ -6,6 +6,8 @@ const {
   deleteEvent,
   getAllEvents,
   getEventsByHostId,
+  getEventById,
+  updateEvent,
 } = require("../controllers/eventController");
 const upload = require("../upload");
 
@@ -14,5 +16,7 @@ eventRouter.post("/:eventId/attend", attendEvent);
 eventRouter.delete("/:eventId", deleteEvent);
 eventRouter.get("/", getAllEvents);
 eventRouter.get('/host/:hostId', getEventsByHostId);
+eventRouter.get("/:eventId", getEventById);
+eventRouter.put("/:eventId", upload.single('eventImage'), updateEvent);
 
 module.exports = eventRouter;

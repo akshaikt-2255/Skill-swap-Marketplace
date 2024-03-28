@@ -19,12 +19,12 @@ const UpdatePassword = ({  handleSnackBarOpen }) => {
       return;
     }
     const result = await dispatch(
-      checkUserPasswordThunk({ username: user?.user?.username, password: currentPwd })
+      checkUserPasswordThunk({ username: user?.username, password: currentPwd })
     );
     if (result?.payload?.isPasswordCorrect) {
       const formData = new FormData();
       formData.append("newPassword", newPassword);
-      formData.append("username", user?.user?.username);
+      formData.append("username", user?.username);
       const result = await dispatch(updateUser(formData));
       if (result?.payload) {
         console.log("here", result.payload);
