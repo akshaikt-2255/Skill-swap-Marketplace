@@ -20,6 +20,7 @@ const EditProfile = lazy( ()=> import("./components/EditProfile/EditProfile"));
 const SkillsPage = lazy( ()=> import("./components/Skills/SkillsList"));
 const EventDetails = lazy(() => import('./components/Events/EventDetails'));
 const EditEvent = lazy(() => import('./components/Events/EditEvent'));
+const UserDetailPage = lazy(() => import('./components/Skills/UserDetails'));
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const App = () => {
             <Route path="/allEvents" element={<AllEvents />} />
             <Route path="/event-details/:eventId" element={<EventDetails />} />
             <Route path="/events/edit/:eventId" element={<EditEvent />} />
+            <Route path="/user/:userId" element={<UserDetailPage />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </main>

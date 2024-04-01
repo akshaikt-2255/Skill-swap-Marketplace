@@ -306,6 +306,51 @@ const getUsers = async (req, res) => {
   }
 };
 
+const removeFollower = async (req, res) => {
+  const { userId, followerId } = req.body; 
+  try {
+    await User.findByIdAndUpdate(
+      userId,
+      { $pull: { followers: followerId } },
+      { new: true }
+    );
+
+    await User.findByIdAndUpdate(
+      followerId,
+      { $pull: { following: userId } },
+      { new: true }
+    );
+
+    res.json({ message: "Follower removed successfully." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error." });
+  }
+};
+
+const unfollow = async (req, res) => {
+  const { userId, unfollowId } = req.body; 
+
+  try {
+    await User.findByIdAndUpdate(
+      userId,
+      { $pull: { following: unfollowId } },
+      { new: true }
+    );
+
+    await User.findByIdAndUpdate(
+      unfollowId,
+      { $pull: { followers: userId } },
+      { new: true }
+    );
+
+    res.json({ message: "Successfully unfollowed the user." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error." });
+  }
+};
+
 module.exports = {
   getConversations,
   getUserIdFromUsername,
@@ -320,4 +365,6 @@ module.exports = {
   getUserById,
   getUsers,
   followUser,
+  removeFollower,
+  unfollow
 };

@@ -17,7 +17,8 @@ authRouter.get('/user/:username', UserController.getUserIdFromUsername);
 authRouter.post('/username', UserController.getUsernameFromEmail);
 authRouter.get('/user/id/:userId', UserController.getUserById);
 authRouter.get('/users', UserController.getUsers);
-
+authRouter.put('/removeFollower', passport.authenticate('jwt', { session: false }), UserController.removeFollower);
+authRouter.put('/unfollow', passport.authenticate('jwt', { session: false }), UserController.unfollow);
 // Protected route example
 authRouter.get('/test', passport.authenticate('jwt', { session: false }), (req, res) => {
   res.json({

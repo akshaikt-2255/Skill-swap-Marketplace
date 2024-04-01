@@ -60,3 +60,37 @@
     color: #333;
     font-size: 1rem;
 }
+
+.follower-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 8px;
+  }
+  
+  .follower-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .follower-avatar {
+    margin-right: 16px;
+  }
+  .user-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 8px;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-avatar {
+    margin-right: 16px;
+  }
+    

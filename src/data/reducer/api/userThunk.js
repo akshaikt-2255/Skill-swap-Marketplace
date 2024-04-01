@@ -504,3 +504,70 @@ export const updateEvent = createAsyncThunk(
     }
   }
 );
+
+const removeFollowerApi = async (userId, followerId) => {
+  const response = await fetch(`http://localhost:4000/api/auth/removeFollower`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+    body: JSON.stringify({
+      userId,
+      followerId
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Could not remove follower");
+  }
+
+  return await response.json();
+};
+
+const unfollowApi = async (userId, unfollowId) => {
+  const response = await fetch(`http://localhost:4000/api/auth/unfollow`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+    body: JSON.stringify({
+      userId,
+      unfollowId
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Could not unfollow the user");
+  }
+
+  return await response.json();
+};
+
+export const removeFollower = createAsyncThunk(
+  "users/removeFollower",
+  async ({ userId, followerId }, { rejectWithValue }) => {
+    try {
+      const result = await removeFollowerApi(userId, followerId);
+      return result;
+    } catch (error) {
+      return rejectWithValue(error.message || "Could not remove follower");
+    }
+  }
+);
+
+export const unfollow = createAsyncThunk(
+  "users/unfollow",
+  async ({ userId, followingId }, { rejectWithValue }) => {
+    try {
+      const result = await unfollowApi(userId, followingId);
+      return result;
+    } catch (error) {
+      return rejectWithValue(error.message || "Could not unfollow the user");
+    }
+  }
+);
+

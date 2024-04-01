@@ -51,6 +51,10 @@ const SkillsPage = () => {
     setSkillFilter(event.target.value);
   };
 
+  const handleSkillClick = (personId) => {
+    navigate(`/user/${personId}`);
+  };
+
   const handleFollow = async (personId) => {
     if (!currentUserId) {
       navigate("/login"); // Redirect to login if not logged in
@@ -135,7 +139,7 @@ const SkillsPage = () => {
             sx={{ display: "flex" }}
           >
             <Card
-              sx={{ width: "100%", display: "flex", flexDirection: "column" }}
+              sx={{ width: "100%", display: "flex", flexDirection: "column" }} onClick={() => handleSkillClick(person._id)}
             >
               <CardMedia
                 component="img"
@@ -160,7 +164,6 @@ const SkillsPage = () => {
                 <Typography variant="body2" color="text.secondary">
                   Skill: {person.primarySkill}
                 </Typography>
-                {/* <Rating name="read-only" value={person.rating} readOnly /> */}
               </CardContent>
               <CardActions
                 sx={{ display: "flex", justifyContent: "space-between", p: 1 }}
