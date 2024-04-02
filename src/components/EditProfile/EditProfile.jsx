@@ -33,7 +33,6 @@ const EditProfile = () => {
   const [value, setValue] = useState(0);
   const username = localStorage.getItem("username");
   const { user} = useSelector((state) => state.user);
-
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 

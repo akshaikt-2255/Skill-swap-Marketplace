@@ -43,7 +43,7 @@ const createEvent = async (req, res) => {
 const attendEvent = async (req, res) => {
   try {
     const { eventId } = req.params;
-    const userId = req.user._id;
+    const {userId} = req.body;
     const event = await Event.findById(eventId);
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
@@ -58,7 +58,7 @@ const attendEvent = async (req, res) => {
     }
 
     event.attendees.push(userId);
-
+    event.availableSlots -= 1;
     await event.save();
 
     res.status(200).json({ message: "Successfully added to event", event });

@@ -13,6 +13,7 @@ import {
   getEventsByHostId,
   getAllEventsThunk,
   deleteEvent,
+  attendEvent,
 } from "./api/userThunk";
 
 const initialState = {
@@ -212,6 +213,17 @@ const userSlice = createSlice({
       .addCase(deleteEvent.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to delete the event";
+      });
+      builder
+      .addCase(attendEvent.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(attendEvent.fulfilled, (state, action) => {
+        state.status = "succeeded";
+      })
+      .addCase(attendEvent.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to attend the event";
       });
   },
 });
