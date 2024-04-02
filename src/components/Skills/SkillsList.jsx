@@ -139,9 +139,10 @@ const SkillsPage = () => {
             sx={{ display: "flex" }}
           >
             <Card
-              sx={{ width: "100%", display: "flex", flexDirection: "column" }} onClick={() => handleSkillClick(person._id)}
+              sx={{ width: "100%", display: "flex", flexDirection: "column" }} 
             >
               <CardMedia
+              onClick={() => handleSkillClick(person._id)}
                 component="img"
                 sx={{
                   height: "350px",
