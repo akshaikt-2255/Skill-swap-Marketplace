@@ -16,7 +16,8 @@ import { Close, Visibility, VisibilityOff } from "@mui/icons-material";
 import "./Login.css";
 import registerImg from "../../assets/register.png";
 import { useDispatch } from "react-redux";
-import { getUser } from "../../data/reducer/api/userThunk";
+import { getUser,sendOtp } from "../../data/reducer/api/userThunk";
+import EmailModal from "./ForgotPassword";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -28,6 +29,7 @@ const Login = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -49,6 +51,14 @@ const Login = () => {
   const handleSnackbarOpen = (message) => {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
+  };
+
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
   };
 
   const validateForm = () => {
@@ -78,6 +88,29 @@ const Login = () => {
           }, 1000);
         }
       }
+    }
+  };
+
+  const handleSendOTP = async (email) => {
+    console.log('Sending OTP to:', email);
+    
+    try {
+      const result = await dispatch(sendOtp(email));
+      console.log({result})
+      if (result?.error) {
+        const errorMessage = result?.payload || "Error sending OTP.";
+        setIsError(true);
+        handleSnackbarOpen(errorMessage);
+      } else {
+        setIsError(false);
+        handleSnackbarOpen("OTP sent successfully.");
+        navigate('/otp', { state: { email: email, otp: result?.payload?.otp } });
+
+      }
+    } catch (error) {
+      console.error('Error in handleSendOTP:', error);
+      setIsError(true);
+      handleSnackbarOpen("An unexpected error occurred.");
     }
   };
 
@@ -142,6 +175,13 @@ const Login = () => {
                   {errors.form}
                 </Typography>
               )}
+              <Typography
+              variant="body2"
+              style={{ textAlign: "left", margin: "0.5rem 0" }}
+            >
+              <Link onClick={handleOpenModal} to="#">Forgot password?</Link>
+            </Typography>
+            <EmailModal open={modalOpen} handleClose={handleCloseModal} handleSendOTP={handleSendOTP} />
               <Button
                 type="submit"
                 fullWidth

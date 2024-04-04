@@ -7,6 +7,8 @@ import Chat from './components/Chat/Chat';
 import CreateEventPage from './components/Events/CreateEventsPage';
 import MyEvents from './components/Events/MyEvents';
 import AllEvents from './components/Events/AllEvents';
+import OtpPage from './components/Login/OtpPage';
+import ResetPassword from './components/Login/ResetPassword';
 
 const Header = lazy(() => import('./components/Header/Header'));
 const HomePage = lazy(() => import('./components/HomePage/HomePage'));
@@ -44,6 +46,8 @@ const App = () => {
             <Route path="/event-details/:eventId" element={<EventDetails />} />
             <Route path="/events/edit/:eventId" element={<EditEvent />} />
             <Route path="/user/:userId" element={<UserDetailPage />} />
+            <Route path="/otp" element={<OtpPage />} />
+            <Route path="/reset" element={<ResetPassword />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </main>

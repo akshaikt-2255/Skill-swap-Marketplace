@@ -2,6 +2,7 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Conversation = require("../models/Conversations");
+const  transporter  = require("../nodemailerConfig");
 
 // Controller functions
 const registerUser = async (req, res) => {
@@ -350,6 +351,54 @@ const unfollow = async (req, res) => {
     res.status(500).json({ error: "Server error." });
   }
 };
+function generateNumericOTP(length) {
+  let otp = '';
+  for (let i = 0; i < length; i++) {
+      otp += Math.floor(Math.random() * 10).toString();
+  }
+  return otp;
+}
+
+const sendOtp = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).send({ error: 'Email not found.' });
+    }
+    const otp = generateNumericOTP(4);
+    const expirationTime = new Date();
+    expirationTime.setMinutes(expirationTime.getMinutes() + 10); // OTP expires in 10 minutes
+
+    // Save OTP to user
+    await User.updateOne(
+      { email },
+      {
+        otp: {
+          code: otp,
+          expiresAt: expirationTime,
+        },
+      }
+    );
+
+    const mailOptions = {
+      from: process.env.EMAIL_USERNAME,
+      to: email,
+      subject: 'Your OTP for Verification',
+      text: `Your OTP is: ${otp}`,
+    };
+    console.log({mailOptions})
+    console.log({transporter})
+    // Send email
+    await transporter.sendMail(mailOptions);
+    res.status(200).send({ message: 'OTP sent successfully.' , otp: otp});
+  } catch (error) {
+    console.error('Error in sendOtp:', error);
+    res.status(500).send({ error: 'Error sending OTP.' });
+  }
+};
+
 
 module.exports = {
   getConversations,
@@ -366,5 +415,6 @@ module.exports = {
   getUsers,
   followUser,
   removeFollower,
-  unfollow
+  unfollow,
+  sendOtp
 };

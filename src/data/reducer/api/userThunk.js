@@ -16,6 +16,7 @@ import {
   getUsernameById,
   getUsers,
   removeFollowerApi,
+  sendOtpApi,
   unfollowApi,
   updateEventApi,
   updateUserApi,
@@ -275,6 +276,18 @@ export const attendEvent = createAsyncThunk(
       return response;
     } catch (error) {
       return rejectWithValue(error.message || "Could not attend the event");
+    }
+  }
+);
+
+export const sendOtp = createAsyncThunk(
+  "user/sendOtp",
+  async (email, { rejectWithValue }) => {
+    try {
+      const response = await sendOtpApi(email);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message || "Could not send OTP");
     }
   }
 );

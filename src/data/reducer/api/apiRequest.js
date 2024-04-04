@@ -143,7 +143,7 @@ export const getUsernameByEmail = async (email) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(email),
+      body: JSON.stringify({email}),
     });
     return response.json();
   } catch (error) {
@@ -349,3 +349,21 @@ export const attendEventApi = async (eventId, userId) => {
 
   return await response.json();
 };
+
+export const sendOtpApi = async (email) => {
+  const response = await fetch("http://localhost:4000/api/auth/send-otp", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || "Could not send OTP");
+  }
+
+  return await response.json();
+};
+
