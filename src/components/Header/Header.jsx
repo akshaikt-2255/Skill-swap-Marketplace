@@ -49,8 +49,7 @@ const Header = () => {
         <div className="logo">
           <Link to="/">SkillSwap</Link>
         </div>
-        <SearchComponent />
-      
+        <SearchComponent isDesktop={true} />
         <div className="login-signup main-menu">
           {loggedInUser ? (
             <>
@@ -101,29 +100,32 @@ const Header = () => {
         handleLogout={handleLogout}
       />
       <div className="mobile-menu">
-        <form className="search" onSubmit={handleSearch}>
-          <input
-            type="text"
-            placeholder="Search skills"
-            className="search-bar"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </form>
+        <SearchComponent onToggleMenu={toggleMenu} />
         <div className="login-signup">
           {loggedInUser ? (
             <div className="profile-logout-wrapper">
               <Link to="/skills" className="login-button" onClick={toggleMenu}>
                 Browse Skills
               </Link>
-              <Link to="/allEvents" className="login-button" onClick={toggleMenu}>
+              <Link
+                to="/allEvents"
+                className="login-button"
+                onClick={toggleMenu}
+              >
                 Browse Events
               </Link>
               <Link to="/create" className="login-button" onClick={toggleMenu}>
                 Create Event
               </Link>
+              <Link
+                to="/myEvents"
+                className="login-button"
+                onClick={toggleMenu}
+              >
+                My Events
+              </Link>
               <Link to="/profile" onClick={toggleMenu}>
-                <button className="login-button" >View Profile</button>
+                <button className="login-button">View Profile</button>
               </Link>
               <Link to="/chat" className="login-button" onClick={toggleMenu}>
                 Messages
@@ -137,7 +139,11 @@ const Header = () => {
               <Link to="/skills" className="login-button" onClick={toggleMenu}>
                 Browse Skills
               </Link>
-              <Link to="/allEvents" className="login-button" onClick={toggleMenu}>
+              <Link
+                to="/allEvents"
+                className="login-button"
+                onClick={toggleMenu}
+              >
                 Browse Events
               </Link>
               <Link to="/login" className="login-button" onClick={toggleMenu}>

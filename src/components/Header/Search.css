@@ -77,3 +77,20 @@
     font-style: italic;
     color: #777;
   }
+
+  
+  @media screen and (max-width: 768px) {
+    .search-container {
+      width: 100%;
+      max-width: 350px;
+    }
+    .main-menu{
+      display: none;
+    }
+    .results-dropdown {
+      max-width: 350px;
+    }
+  }
+
+  
+  

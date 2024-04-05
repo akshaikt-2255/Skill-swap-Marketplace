@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { getImageUrl } from "../../utils";
 import { search } from "../../data/reducer/api/userThunk";
 
-const SearchComponent = () => {
+const SearchComponent = ({isDesktop,onToggleMenu}) => {
   const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -35,8 +35,15 @@ const SearchComponent = () => {
     }
   };
 
+  const onSearchClose = () => {
+    setIsDropdownVisible(false);
+    if(onToggleMenu) {
+      onToggleMenu();
+    }
+  }
+
   return (
-    <div className="search-container">
+    <div className={`search-container ${isDesktop ? 'main-menu' : ""}`}>
       <div className="search-wrapper">
         <SearchIcon className="search-icon" />
         <input
@@ -53,7 +60,7 @@ const SearchComponent = () => {
           searchResults?.events?.length > 0 ? (
             <>
               {searchResults.users?.map((user) => (
-                <li key={user._id} onClick={() => setIsDropdownVisible(false)}>
+                <li key={user._id} onClick={onSearchClose}>
                   <Link to={`/user/${user._id}`} className="search-result-item">
                     <img
                       src={getImageUrl(user.profilePicture)}
@@ -68,7 +75,7 @@ const SearchComponent = () => {
                 </li>
               ))}
               {searchResults.events?.map((event) => (
-                <li key={event._id} onClick={() => setIsDropdownVisible(false)}>
+                <li key={event._id} onClick={onSearchClose}>
                   <Link
                     to={`/event-details/${event._id}`}
                     className="search-result-item"
