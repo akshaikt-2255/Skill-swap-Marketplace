@@ -4,6 +4,7 @@ import { getAllEventsThunk } from '../../data/reducer/api/userThunk';
 import './EventSection.css';
 import { getImageUrl } from '../../utils';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const SkillEventsSection = () => {
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const SkillEventsSection = () => {
           </div>
         ))}
       </div>
-      <button className="see-all-skill-events">See all events</button>
+      <Link to="/allEvents"><button className="see-all-skill-events">See all events</button></Link>
     </div>
   );
 };
