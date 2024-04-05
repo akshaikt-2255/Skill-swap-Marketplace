@@ -14,6 +14,7 @@ import {
   getAllEventsThunk,
   deleteEvent,
   attendEvent,
+  search,
 } from "./api/userThunk";
 
 const initialState = {
@@ -26,6 +27,7 @@ const initialState = {
   username: "",
   myEvents: [],
   allEvents: [],
+  searchResults: null
 };
 
 const userSlice = createSlice({
@@ -224,6 +226,19 @@ const userSlice = createSlice({
       .addCase(attendEvent.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to attend the event";
+      });
+      builder.addCase(search.pending, (state) => {
+        state.status = "loading";
+        state.searchResults = null; 
+      });
+      builder.addCase(search.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.searchResults = action.payload;
+      });
+      builder.addCase(search.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Search failed";
+        state.searchResults = null;
       });
   },
 });

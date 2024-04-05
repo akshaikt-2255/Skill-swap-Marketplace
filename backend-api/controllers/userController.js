@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Event = require("../models/Events");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Conversation = require("../models/Conversations");
@@ -399,6 +400,29 @@ const sendOtp = async (req, res) => {
   }
 };
 
+const search = async (req, res) => {
+  const searchTerm = req.query.term; // Or however you plan to receive the search term
+
+  if (!searchTerm) {
+      return res.status(400).json({ error: 'Search term is required.' });
+  }
+
+  try {
+      // Search for users with the primarySkill matching searchTerm
+      const users = await User.find({
+          primarySkill: { $regex: searchTerm, $options: 'i' } // case-insensitive search
+      }).select('-password'); // exclude password from the result
+      // Search for events with the title matching searchTerm
+      const events = await Event.find({
+          title: { $regex: searchTerm, $options: 'i' } // case-insensitive search
+      });
+      res.json({ users, events });
+  } catch (error) {
+      console.error('Search error:', error);
+      res.status(500).json({ error: 'Error during search operation' });
+  }
+};
+
 
 module.exports = {
   getConversations,
@@ -416,5 +440,6 @@ module.exports = {
   followUser,
   removeFollower,
   unfollow,
-  sendOtp
+  sendOtp,
+  search
 };
