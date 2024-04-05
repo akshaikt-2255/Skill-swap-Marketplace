@@ -12,7 +12,7 @@ const EmailModal = ({ open, handleClose, handleSendOTP }) => {
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Enter Email for OTP</DialogTitle>
-      <DialogContent style={{width: '500px'}}>
+      <DialogContent style={{width: '300px'}}>
         <TextField
           autoFocus
           margin="dense"
