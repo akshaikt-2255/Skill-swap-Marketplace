@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import SideBar from "../SideBar/SideBar";
 import { Avatar } from "@mui/material";
 import { getImageUrl } from "../../utils";
+import SearchComponent from "./Search";
 
 const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,15 +49,8 @@ const Header = () => {
         <div className="logo">
           <Link to="/">SkillSwap</Link>
         </div>
-        <form className="search main-menu" onSubmit={handleSearch}>
-          <input
-            type="text"
-            placeholder="Search skills"
-            className="search-bar"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </form>
+        <SearchComponent />
+      
         <div className="login-signup main-menu">
           {loggedInUser ? (
             <>

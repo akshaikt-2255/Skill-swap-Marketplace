@@ -367,3 +367,20 @@ export const sendOtpApi = async (email) => {
   return await response.json();
 };
 
+export const searchApi = async (searchTerm) => {
+  const response = await fetch(`http://localhost:4000/api/auth/search?term=${encodeURIComponent(searchTerm)}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Could not perform search");
+  }
+
+  return await response.json();
+};
+

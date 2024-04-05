@@ -16,6 +16,7 @@ import {
   getUsernameById,
   getUsers,
   removeFollowerApi,
+  searchApi,
   sendOtpApi,
   unfollowApi,
   updateEventApi,
@@ -288,6 +289,18 @@ export const sendOtp = createAsyncThunk(
       return response;
     } catch (error) {
       return rejectWithValue(error.message || "Could not send OTP");
+    }
+  }
+);
+
+export const search = createAsyncThunk(
+  "search/results",
+  async (searchTerm, { rejectWithValue }) => {
+    try {
+      const response = await searchApi(searchTerm);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message || "Could not perform search");
     }
   }
 );

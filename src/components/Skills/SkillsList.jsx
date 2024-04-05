@@ -91,6 +91,7 @@ const SkillsPage = () => {
   }
 
   const filteredUsers = usersWithSkills
+    .filter((user) => user.name && user.primarySkill)
     .filter((user) => user._id !== currentUserId)
     .filter(
       (user) =>
@@ -139,10 +140,10 @@ const SkillsPage = () => {
             sx={{ display: "flex" }}
           >
             <Card
-              sx={{ width: "100%", display: "flex", flexDirection: "column" }} 
+              sx={{ width: "100%", display: "flex", flexDirection: "column" }}
             >
               <CardMedia
-              onClick={() => handleSkillClick(person._id)}
+                onClick={() => handleSkillClick(person._id)}
                 component="img"
                 sx={{
                   height: "350px",
