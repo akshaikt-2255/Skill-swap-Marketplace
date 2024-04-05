@@ -92,5 +92,12 @@
     }
   }
 
+  @media screen and (max-width: 1024px) {
+    .search-container {
+      min-width: 300px;
+      padding-left: 20px;
+    }
+  }
+
   
   

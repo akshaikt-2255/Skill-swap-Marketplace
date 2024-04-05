@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllEventsThunk } from '../../data/reducer/api/userThunk';
 import './EventSection.css';
 import { getImageUrl } from '../../utils';
+import { useNavigate } from 'react-router-dom';
 
 const SkillEventsSection = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user, allEvents } = useSelector(state => state.user);
   const [displayedEvents, setDisplayedEvents] = useState([]);
 
@@ -21,13 +23,17 @@ const SkillEventsSection = () => {
     }
   }, [allEvents, user]);
 
+  const onNavigateEvent = (eventId) => {
+    navigate(`/event-details/${eventId}`);
+  };
+
   return (
     <div className="skill-events-section">
       <h2 className="skill-events-title">Skill Events Near You</h2>
       <div className="skill-events-grid">
         {displayedEvents?.map((event, index) => (
           <div className="skill-event-card" key={index}>
-            <img src={getImageUrl(event.eventImage) || "defaultImage.jpg"} alt={event.title} className="skill-event-image" />
+            <img onClick={() => onNavigateEvent(event._id)} src={getImageUrl(event.eventImage) || "defaultImage.jpg"} alt={event.title} className="skill-event-image" />
             <div className="skill-event-info">
               <h3 className="skill-event-title">{event.title}</h3>
               <p className="skill-event-hosted-by">Hosted by: {event.host.name}</p>
