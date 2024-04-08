@@ -5,29 +5,46 @@ import { getImageUrl } from "../../utils";
 import "../HomePage/EventSection.css";
 import { format, parseISO } from "date-fns";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Typography } from "@mui/material";
+import { Button, IconButton, Snackbar, SnackbarContent,Typography } from "@mui/material";
+import { Close } from "@mui/icons-material";
 
 const AllEvents = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, allEvents } = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     dispatch(getAllEventsThunk());
   }, [dispatch]);
 
-  const handleAttend = (eventId) => {
+  const handleAttend = async (eventId) => {
     const userId = user?._id;
     if(!userId) {
       navigate('/login');
     }
     console.log(`Attending event with ID ${userId}: ${eventId}`);
-    dispatch(attendEvent({ userId, eventId }));
+    const result = await dispatch(attendEvent({ userId, eventId }));
+    handleSnackbarOpen(result?.payload?.message);
+    if(result?.payload?.event) {
+      dispatch(getAllEventsThunk());
+    }
   };
 
   const onNavigateEvent = (eventId) => {
     navigate(`/event-details/${eventId}`);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const handleSnackbarOpen = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
   };
 
   if (isLoading) return <p>Loading...</p>;
@@ -102,6 +119,27 @@ const AllEvents = () => {
             <p>No events found.</p>
           )}
         </div>
+        <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <SnackbarContent
+          message={snackbarMessage}
+          className={!isError ? "snack-positive" : "snack-negative"}
+          action={
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleSnackbarClose}
+            >
+              <Close fontSize="small" />
+            </IconButton>
+          }
+        />
+      </Snackbar>
       </div>
     </>
   );

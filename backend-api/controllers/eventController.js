@@ -67,6 +67,32 @@ const attendEvent = async (req, res) => {
   }
 };
 
+const unAttendEvent = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const { userId } = req.body;
+
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    const attendeeIndex = event.attendees.indexOf(userId);
+    if (attendeeIndex === -1) {
+      return res.status(400).json({ message: "User not attending the event" });
+    }
+
+    event.attendees.splice(attendeeIndex, 1);
+    event.availableSlots += 1;
+    await event.save();
+
+    res.status(200).json({ message: "Successfully removed from event", event });
+  } catch (error) {
+    res.status(500).json({ message: "Error unattending event", error });
+  }
+};
+
+
 const deleteEvent = async (req, res) => {
   try {
     const { eventId } = req.params;
@@ -184,4 +210,5 @@ module.exports = {
   getEventsByHostId,
   getEventById,
   updateEvent,
+  unAttendEvent
 };
