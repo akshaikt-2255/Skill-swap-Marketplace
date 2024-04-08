@@ -350,6 +350,27 @@ export const attendEventApi = async (eventId, userId) => {
   return await response.json();
 };
 
+export const unAttendEventApi = async (eventId, userId) => {
+  const response = await fetch(
+    `http://localhost:4000/api/events/${eventId}/unattend`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ userId }),
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Could not attend the event");
+  }
+
+  return await response.json();
+};
+
 export const sendOtpApi = async (email) => {
   const response = await fetch("http://localhost:4000/api/auth/send-otp", {
     method: "POST",

@@ -18,6 +18,7 @@ import {
   removeFollowerApi,
   searchApi,
   sendOtpApi,
+  unAttendEventApi,
   unfollowApi,
   updateEventApi,
   updateUserApi,
@@ -274,6 +275,21 @@ export const attendEvent = createAsyncThunk(
   async ({ eventId, userId }, { rejectWithValue }) => {
     try {
       const response = await attendEventApi(eventId, userId);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message || "Could not attend the event");
+    }
+  }
+);
+
+
+export const unAttendEvent = createAsyncThunk(
+  "events/attendEvent",
+  async ({ eventId, userId }, { rejectWithValue }) => {
+    try {
+      console.log(eventId)
+      console.log(userId)
+      const response = await unAttendEventApi(eventId, userId);
       return response;
     } catch (error) {
       return rejectWithValue(error.message || "Could not attend the event");
