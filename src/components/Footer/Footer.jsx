@@ -4,9 +4,10 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import "./Footer.css";
+import { useSelector } from "react-redux";
 
 const Footer = () => {
-  const user = localStorage.getItem('username')
+  const user = useSelector((state) => state.user.user);
   return (
     <Box className="footer">
       <Container maxWidth="lg">
