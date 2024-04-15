@@ -8,12 +8,14 @@ const {
   getEventsByHostId,
   getEventById,
   updateEvent,
-  unAttendEvent
+  unAttendEvent,
+  getEventsCount
 } = require("../controllers/eventController");
 const upload = require("../upload");
 
 eventRouter.post("/create", upload.single('eventImage'), createEvent);
 eventRouter.post("/:eventId/attend", attendEvent);
+eventRouter.get('/count', getEventsCount);
 eventRouter.post('/:eventId/unattend', unAttendEvent);
 eventRouter.delete("/:eventId", deleteEvent);
 eventRouter.get("/", getAllEvents);

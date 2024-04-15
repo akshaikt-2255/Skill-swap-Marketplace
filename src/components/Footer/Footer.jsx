@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 const Footer = () => {
   const user = useSelector((state) => state.user.user);
   return (
+    <footer>
     <Box className="footer">
       <Container maxWidth="lg">
         <Grid
@@ -136,6 +137,7 @@ const Footer = () => {
         </Box>
       </Container>
     </Box>
+    </footer>
   );
 };
 

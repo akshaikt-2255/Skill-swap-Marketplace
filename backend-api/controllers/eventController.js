@@ -202,6 +202,16 @@ const updateEvent = async (req, res) => {
   }
 };
 
+const getEventsCount = async (req, res) => {
+  try {
+    const count = await Event.countDocuments({});
+    res.status(200).json({ count });
+  } catch (error) {
+    console.error('Error fetching event count:', error);
+    res.status(500).json({ message: "Error retrieving event count", error });
+  }
+};
+
 module.exports = {
   createEvent,
   attendEvent,
@@ -210,5 +220,6 @@ module.exports = {
   getEventsByHostId,
   getEventById,
   updateEvent,
-  unAttendEvent
+  unAttendEvent,
+  getEventsCount
 };

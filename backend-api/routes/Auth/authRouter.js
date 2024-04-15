@@ -21,6 +21,7 @@ authRouter.put('/removeFollower', passport.authenticate('jwt', { session: false 
 authRouter.put('/unfollow', passport.authenticate('jwt', { session: false }), UserController.unfollow);
 authRouter.post('/send-otp', UserController.sendOtp);
 authRouter.get("/search", UserController.search);
+authRouter.get('/users/count', UserController.getUsersCount);
 // Protected route example
 authRouter.get('/test', passport.authenticate('jwt', { session: false }), (req, res) => {
   res.json({

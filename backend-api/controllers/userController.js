@@ -70,6 +70,16 @@ const loginUser = async (req, res) => {
   }
 };
 
+const getUsersCount = async (req, res) => {
+  try {
+    const count = await User.countDocuments({}); // Count all users in the User collection
+    res.json({ count });
+  } catch (error) {
+    console.error('Error fetching user count:', error);
+    res.status(500).json({ error: "Server error while retrieving user count." });
+  }
+};
+
 const updateUser = async (req, res) => {
   const {
     username,
@@ -423,6 +433,26 @@ const search = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    // If no user was found and deleted, return a 404 error
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json({ message: "User successfully deleted.", deletedUser });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ error: "Server error while deleting user." });
+  }
+};
+
+
 
 module.exports = {
   getConversations,
@@ -441,5 +471,7 @@ module.exports = {
   removeFollower,
   unfollow,
   sendOtp,
-  search
+  search,
+  getUsersCount,
+  deleteUser
 };
