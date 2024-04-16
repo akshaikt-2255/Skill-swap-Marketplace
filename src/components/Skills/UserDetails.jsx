@@ -1,11 +1,25 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Avatar, Box, Chip, Container, Grid, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Chip,
+  Container,
+  Grid,
+  Typography,
+  CardActionArea,
+  Dialog,
+  Card,
+} from "@mui/material";
 import { getImageUrl } from "../../utils";
+import VideoPlayer from "../Profile/VideoPlayer";
+import VideoPreview from "../Profile/VideoPreview";
 
 const UserDetailPage = () => {
   const { userId } = useParams();
   const [userDetails, setUserDetails] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState("");
 
   useEffect(() => {
     // Fetch the user details from the API
@@ -30,6 +44,21 @@ const UserDetailPage = () => {
   if (!userDetails) {
     return <div>Loading...</div>;
   }
+
+  const handleClickOpen = (videoUrl) => {
+    setOpen(true);
+    setSelectedVideo(videoUrl);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const extractPublicId = (videoUrl) => {
+    const baseUrlPattern =
+      /^https:\/\/res\.cloudinary\.com\/dfr2g1dz6\/video\/upload\/v\d+\//;
+    return videoUrl.replace(baseUrlPattern, "").replace(/\.\w+$/, "");
+  };
 
   return (
     <Container>
@@ -104,6 +133,57 @@ const UserDetailPage = () => {
                   ))}
                 </div>
               </div>
+              {userDetails?.videos?.length > 0 && (
+                <Typography variant="h5" sx={{ mt: 3, mb: 2 }}>
+                  My Videos
+                </Typography>
+              )}
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                {userDetails?.videos.map((videoUrl, index) => (
+                  <Card
+                    key={index}
+                    sx={{ width: 160, height: 160, position: "relative" }}
+                  >
+                    <CardActionArea
+                      sx={{ height: "100%" }}
+                      onClick={() => handleClickOpen(videoUrl)}
+                    >
+                      <Box
+                        sx={{
+                          width: "100%",
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "#000",
+                        }}
+                      >
+                        <VideoPreview
+                          video={{
+                            id: extractPublicId(videoUrl),
+                            link: videoUrl,
+                          }}
+                        />
+                      </Box>
+                    </CardActionArea>
+                  </Card>
+                ))}
+              </Box>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                sx={{
+                  "& .MuiDialog-paper": { width: "80%", maxHeight: "80vh" },
+                }}
+              >
+                <VideoPlayer
+                  id="demo-player"
+                  publicId={extractPublicId(selectedVideo)}
+                  autoPlay={true}
+                  width="3840"
+                  height="2160"
+                />
+              </Dialog>
             </Grid>
           </Grid>
         </Grid>
