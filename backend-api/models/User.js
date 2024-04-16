@@ -52,6 +52,7 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     }],
+    videos: [{ type: String }],
 }, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true }});
 
 // Password hashing middleware

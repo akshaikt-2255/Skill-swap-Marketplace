@@ -19,8 +19,15 @@ import {
   SnackbarContent,
   useMediaQuery,
   useTheme,
+  InputLabel,
 } from "@mui/material";
-import { PhotoCamera, Close, AccountCircle, VpnKey } from "@mui/icons-material";
+import {
+  PhotoCamera,
+  Close,
+  AccountCircle,
+  VpnKey,
+  Add,
+} from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../data/reducer/api/userThunk";
 import UpdatePassword from "./ChangePassword";
@@ -32,7 +39,7 @@ const EditProfile = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState(0);
   const username = localStorage.getItem("username");
-  const { user} = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -46,7 +53,8 @@ const EditProfile = () => {
     email: user?.email || "",
     bio: user?.bio || "",
     primarySkill: user?.primarySkill || "",
-    gender: user?.gender || ""
+    gender: user?.gender || "",
+    videos: user?.videos || [],
   });
   const [availableInterests, setAvailableInterests] = useState(allInterests);
   const [selectedInterests, setSelectedInterests] = useState(user?.interests);
@@ -61,6 +69,7 @@ const EditProfile = () => {
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleInputChange = (e) => {
     if (e.target.name === "image") {
@@ -81,6 +90,32 @@ const EditProfile = () => {
     setSnackbarOpen(false);
   };
 
+  const uploadVideo = async (videoFile) => {
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append("file", videoFile);
+    formData.append("upload_preset", "video-preset"); // Replace with your Cloudinary upload preset
+    formData.append("resource_type", "video");
+    const CLOUD_NAME = "dfr2g1dz6";
+
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const data = await response.json();
+      setIsUploading(false);
+      return data.secure_url;
+    } catch (err) {
+      setIsUploading(false);
+      handleSnackbarOpen("Upload failed", true);
+      console.error("Upload error:", err);
+    }
+  };
+
   const handleInterestAdd = (event) => {
     const newInterest = event.target.value;
     if (!selectedInterests.includes(newInterest) && newInterest) {
@@ -97,8 +132,30 @@ const EditProfile = () => {
     );
   };
 
+  const handleVideoChange = (event) => {
+    // Ensure files are collected as an array and set in the state
+    const newFiles = Array.from(event.target.files);
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      videos: newFiles,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let videoUrls = [];
+    if (profile.videos && profile.videos.length) {
+      try {
+        videoUrls = await Promise.all(
+          profile.videos.map(video => uploadVideo(video))
+        );
+        handleSnackbarOpen("Upload successful", false);
+      } catch (error) {
+        console.error("Video upload error:", error);
+      }
+    } else {
+      console.error("No videos to upload");
+    }
 
     const formData = new FormData();
     formData.append("name", profile.name);
@@ -109,6 +166,7 @@ const EditProfile = () => {
     formData.append("gender", profile.gender);
     formData.append("profilePicture", profile.image);
     formData.append("interests", selectedInterests);
+    formData.append("videos", videoUrls);
 
     const result = await dispatch(updateUser(formData));
     if (result?.payload) {
@@ -118,6 +176,7 @@ const EditProfile = () => {
       }, 1000);
     }
   };
+
   return (
     <Box
       sx={{
@@ -152,7 +211,12 @@ const EditProfile = () => {
       </Tabs>
 
       {value === 0 && (
-        <Box sx={{ p: isMobile ? 0 : 3, width: isMobile ? "100%" : "calc(100% - 160px)" }}>
+        <Box
+          sx={{
+            p: isMobile ? 0 : 3,
+            width: isMobile ? "100%" : "calc(100% - 160px)",
+          }}
+        >
           <Box>
             <Typography variant="h5">Edit Profile</Typography>
             {profile.image ? (
@@ -289,6 +353,36 @@ const EditProfile = () => {
                 />
               ))}
             </Box>
+
+            <FormControl fullWidth margin="normal">
+              <IconButton
+                color="primary"
+                aria-label="upload video"
+                component="label"
+                sx={{
+                  width: 48, // Set width to your preference
+                  height: 48, // Set height to match width for a square appearance
+                  border: "1px dashed grey",
+                  borderRadius: 1, // Optional: if you want slightly rounded corners
+                  "&:hover": {
+                    backgroundColor: "rgba(0, 0, 0, 0.04)", // Light background on hover
+                  },
+                }}
+              >
+                <input
+                  type="file"
+                  accept="video/*"
+                  multiple
+                  hidden
+                  onChange={handleVideoChange}
+                />
+                <Add sx={{ fontSize: 24 }} /> {/* Adjust size as needed */}
+              </IconButton>
+              <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+                Upload Videos
+              </Typography>
+            </FormControl>
+
             <Button
               type="submit"
               fullWidth
@@ -308,14 +402,14 @@ const EditProfile = () => {
         )}
       </Box>
       <Snackbar
-        open={snackbarOpen}
+        open={snackbarOpen || isUploading}
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
         <SnackbarContent
-          message={snackbarMessage}
-          style={{ backgroundColor: `${isError ? "red" : "green"}` }}
+          message={isUploading ? "Uploading videos..." : snackbarMessage}
+          style={{ backgroundColor: isError ? "red" : "green" }}
           action={
             <IconButton
               size="small"

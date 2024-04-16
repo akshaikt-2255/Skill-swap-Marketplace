@@ -90,6 +90,7 @@ const updateUser = async (req, res) => {
     gender,
     interests,
     newPassword,
+    videos 
   } = req.body;
   try {
     let user = await User.findOne({ username });
@@ -98,11 +99,12 @@ const updateUser = async (req, res) => {
     }
 
     const newInterests = interests ? interests.split(",") : [];
-
+    const newVideos = videos ? videos.split(",") : [];
     const updatedInterests = newInterests.filter(
       (interest) => !user.interests.includes(interest)
     );
     const combinedInterests = [...user.interests, ...updatedInterests];
+    const combinedVideos = [...user.videos, ...newVideos];
     const update = {
       ...(name && { name }),
       ...(email && { email }),
@@ -110,6 +112,7 @@ const updateUser = async (req, res) => {
       ...(bio && { bio }),
       ...(gender && { gender }),
       ...(interests && { interests: combinedInterests }),
+      ...(videos && { videos: combinedVideos })
     };
     if (newPassword) {
       const hashedPassword = await bcrypt.hash(newPassword, 10);
