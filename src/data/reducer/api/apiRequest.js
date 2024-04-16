@@ -405,3 +405,26 @@ export const searchApi = async (searchTerm) => {
   return await response.json();
 };
 
+
+export const saveRatingApi = async (eventId, userId, rating) => {
+  const response = await fetch(`http://localhost:4000/api/events/${eventId}/rate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming the token is stored in localStorage
+    },
+    body: JSON.stringify({
+      userId,
+      rating
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Could not save rating");
+  }
+
+  return await response.json();
+};
+
+

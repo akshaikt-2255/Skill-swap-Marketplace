@@ -43,7 +43,19 @@ const eventSchema = new mongoose.Schema({
     attendees: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
+    }],
+    ratings: [{
+        user: { type: Schema.Types.ObjectId, ref: 'User' },
+        rating: { type: Number, required: true, min: 1, max: 5 }
     }]
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true }});
+
+eventSchema.virtual('averageRating').get(function() {
+    if (this.ratings.length > 0) {
+        const sum = this.ratings.reduce((total, rating) => total + rating.rating, 0);
+        return (sum / this.ratings.length).toFixed(2); // Keep two decimals
+    }
+    return 0;
+});
 
 module.exports = mongoose.model('Event', eventSchema);

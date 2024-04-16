@@ -147,15 +147,84 @@ const checkPassword = async (req, res) => {
 
 const listUsersWithSkills = async (req, res) => {
   try {
-    // Find users where primarySkill field exists and is not null
-    const users = await User.find({
-      primarySkill: { $exists: true, $ne: null },
-    });
-    console.log({ users });
+    const users = await User.aggregate([
+      {
+        $match: {
+          primarySkill: { $exists: true, $ne: null }
+        }
+      },
+      {
+        $lookup: {
+          from: "events",
+          localField: "_id",
+          foreignField: "host",
+          as: "hostedEvents"
+        }
+      },
+      {
+        $project: {
+          name: 1,
+          username: 1,
+          email: 1,
+          primarySkill: 1,
+          bio: 1,
+          interests: 1,
+          gender: 1,
+          profilePicture: 1,
+          hostedEvents: {
+            $filter: {
+              input: "$hostedEvents",
+              as: "event",
+              cond: { $ifNull: ["$$event.ratings", false] }
+            }
+          }
+        }
+      },
+      {
+        $unwind: {
+          path: "$hostedEvents",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $unwind: {
+          path: "$hostedEvents.ratings",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $group: {
+          _id: "$_id",
+          name: { $first: "$name" },
+          username: { $first: "$username" },
+          email: { $first: "$email" },
+          primarySkill: { $first: "$primarySkill" },
+          bio: { $first: "$bio" },
+          interests: { $first: "$interests" },
+          gender: { $first: "$gender" },
+          profilePicture: { $first: "$profilePicture" },
+          averageRating: { $avg: "$hostedEvents.ratings.rating" },
+          hostedEvents: { $push: "$hostedEvents" }
+        }
+      },
+      {
+        $project: {
+          name: 1,
+          username: 1,
+          email: 1,
+          primarySkill: 1,
+          bio: 1,
+          interests: 1,
+          gender: 1,
+          profilePicture: 1,
+          averageRating: { $ifNull: ["$averageRating", 0] }, // Set default if null
+          hostedEvents: 1
+        }
+      }
+    ]);
+
     if (!users.length) {
-      return res
-        .status(404)
-        .json({ message: "No users found with a primary skill." });
+      return res.status(404).json({ message: "No users found with a primary skill." });
     }
 
     res.json(users);
@@ -164,6 +233,9 @@ const listUsersWithSkills = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+
+
+
 
 const followUser = async (req, res) => {
   const { currentUserId, followId } = req.body;

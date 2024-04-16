@@ -212,6 +212,35 @@ const getEventsCount = async (req, res) => {
   }
 };
 
+const saveRating = async (req, res) => {
+  const { eventId } = req.params;
+  const { userId, rating } = req.body;
+
+  try {
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    const existingRatingIndex = event.ratings.findIndex(r => r.user.toString() === userId);
+
+    if (existingRatingIndex > -1) {
+      // User has already rated, update the existing rating
+      event.ratings[existingRatingIndex].rating = rating;
+    } else {
+      // Add new rating
+      event.ratings.push({ user: userId, rating });
+    }
+
+    await event.save();
+    res.status(200).json({ message: "Rating saved successfully", event });
+  } catch (error) {
+    console.error('Error saving rating:', error);
+    res.status(500).json({ message: "Error saving rating", error });
+  }
+};
+
+
 module.exports = {
   createEvent,
   attendEvent,
@@ -221,5 +250,6 @@ module.exports = {
   getEventById,
   updateEvent,
   unAttendEvent,
-  getEventsCount
+  getEventsCount,
+  saveRating
 };

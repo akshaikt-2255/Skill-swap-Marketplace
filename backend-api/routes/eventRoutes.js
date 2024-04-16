@@ -9,7 +9,8 @@ const {
   getEventById,
   updateEvent,
   unAttendEvent,
-  getEventsCount
+  getEventsCount,
+  saveRating
 } = require("../controllers/eventController");
 const upload = require("../upload");
 
@@ -22,5 +23,6 @@ eventRouter.get("/", getAllEvents);
 eventRouter.get('/host/:hostId', getEventsByHostId);
 eventRouter.get("/:eventId", getEventById);
 eventRouter.put("/:eventId", upload.single('eventImage'), updateEvent);
+eventRouter.post('/:eventId/rate', saveRating);
 
 module.exports = eventRouter;

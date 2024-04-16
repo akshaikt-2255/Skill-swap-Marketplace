@@ -15,6 +15,7 @@ import {
   deleteEvent,
   attendEvent,
   search,
+  saveRating,
 } from "./api/userThunk";
 
 const initialState = {
@@ -239,6 +240,21 @@ const userSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message || "Search failed";
         state.searchResults = null;
+      });
+      builder
+      .addCase(saveRating.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(saveRating.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const index = state.allEvents.findIndex(event => event._id === action.payload._id);
+        if (index !== -1) {
+          state.allEvents[index] = action.payload;
+        }
+      })
+      .addCase(saveRating.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to save rating";
       });
   },
 });
