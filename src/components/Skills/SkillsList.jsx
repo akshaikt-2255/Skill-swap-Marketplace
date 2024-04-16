@@ -18,6 +18,7 @@ import {
   Select,
   MenuItem,
   InputLabel,
+  Rating,
 } from "@mui/material";
 import { getImageUrl } from "../../utils";
 import nouser from "../../assets/nouser.png";
@@ -166,6 +167,11 @@ const SkillsPage = () => {
                 <Typography variant="body2" color="text.secondary">
                   Skill: {person.primarySkill}
                 </Typography>
+                <Rating
+                  value={person.averageRating || 0}
+                  readOnly
+                  precision={0.5}
+                />
               </CardContent>
               <CardActions
                 sx={{ display: "flex", justifyContent: "space-between", p: 1 }}

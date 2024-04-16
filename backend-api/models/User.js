@@ -40,12 +40,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: '',
     },
-    chatHistory: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: "Conversation",
-        },
-    ],
+    chatHistory: [{
+        type: Schema.Types.ObjectId,
+        ref: "Conversation",
+    }],
     followers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -54,7 +52,7 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     }],
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true }});
 
 // Password hashing middleware
 userSchema.pre('save', async function(next) {

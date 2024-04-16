@@ -16,6 +16,7 @@ import {
   getUsernameById,
   getUsers,
   removeFollowerApi,
+  saveRatingApi,
   searchApi,
   sendOtpApi,
   unAttendEventApi,
@@ -317,6 +318,18 @@ export const search = createAsyncThunk(
       return response;
     } catch (error) {
       return rejectWithValue(error.message || "Could not perform search");
+    }
+  }
+);
+
+export const saveRating = createAsyncThunk(
+  "events/saveRating",
+  async ({ eventId, userId, rating }, { rejectWithValue }) => {
+    try {
+      const response = await saveRatingApi(eventId, userId, rating);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message || "Could not save rating");
     }
   }
 );

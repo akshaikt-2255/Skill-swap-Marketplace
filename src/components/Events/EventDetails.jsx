@@ -1,16 +1,16 @@
-// In EventDetails.js
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux"; // If you store event details in Redux
-import { format, parseISO } from "date-fns";
+import { format, parseISO, isPast } from "date-fns";
 import { getImageUrl } from "../../utils";
 import "./EventDetails.css";
 import { Link } from "react-router-dom";
 import {
   getAllEventsThunk,
   unAttendEvent,
+  saveRating
 } from "../../data/reducer/api/userThunk";
-import { Button, IconButton, Snackbar, SnackbarContent } from "@mui/material";
+import { Button, IconButton, Snackbar, SnackbarContent, Typography, Rating } from "@mui/material";
 import { Close } from "@mui/icons-material";
 
 const EventDetails = () => {
@@ -24,21 +24,20 @@ const EventDetails = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const userRating = event?.ratings?.find(r => r.user === user?._id)?.rating || 0;
+  const [rating, setRating] = useState(userRating);
   const isUserEvent = user?._id === event?.host?._id;
   const isAttending =
     user && event.attendees.some((attendee) => attendee._id === user._id);
+  const eventDate = parseISO(event?.datetime);
+
   useEffect(() => {
     dispatch(getAllEventsThunk());
-  }, []);
+  }, [dispatch]);
 
   if (!event) {
     return <p>Event not found.</p>;
   }
-
-  const handleDeleteEvent = (eventId) => {
-    dispatch(deleteEvent(eventId));
-    navigate("/myEvents");
-  };
 
   const handleUnAttend = async (eventId) => {
     console.log("here")
@@ -53,8 +52,20 @@ const EventDetails = () => {
     }
   };
 
-  const handleEditEvent = (eventId) => {
-    navigate(`/events/edit/${eventId}`);
+
+  const handleRatingChange = (event, newValue) => {
+    setRating(newValue);
+    // Dispatch the thunk to save the rating
+    dispatch(saveRating({
+      eventId: eventId,
+      userId: user._id,
+      rating: newValue
+    })).then(() => {
+      handleSnackbarOpen('Rating submitted successfully!');
+    }).catch((error) => {
+      handleSnackbarOpen('Failed to submit rating.');
+      setIsError(true);
+    });
   };
 
   const handleSnackbarClose = () => {
@@ -69,14 +80,9 @@ const EventDetails = () => {
   return (
     <>
       <nav className="event-details-breadcrumb">
-        <Link to="/" className="breadcrumb-home">
-          Home
-        </Link>{" "}
-        /{" "}
-        <Link to="/allEvents" className="breadcrumb-home">
-          Events
-        </Link>{" "}
-        / <span>{event.title}</span>
+        <Link to="/" className="breadcrumb-home">Home</Link> / 
+        <Link to="/allEvents" className="breadcrumb-home">Events</Link> / 
+        <span>{event.title}</span>
       </nav>
       <div className="event-details-container">
         <div className="event-image-container">
@@ -88,21 +94,24 @@ const EventDetails = () => {
         </div>
         <div className="event-info-container">
           <h2>{event.title}</h2>
-          <p>{format(parseISO(event?.datetime), "MMM d, yyyy")}</p>
+          <p>{format(eventDate, "MMM d, yyyy")}</p>
           <p>{event.description}</p>
           <p>Hosted by: {event.host.name}</p>
-          {event.online ? (
-            <p>
-              Online Event:{" "}
-              <a href={event.link} target="_blank" rel="noopener noreferrer">
-                Click here for link
-              </a>
-            </p>
-          ) : (
-            <p>Location: {event.location}</p>
+          {!isPast(eventDate) && (event.online ? 
+            <p>Online Event: <a href={event.link} target="_blank" rel="noopener noreferrer">Click here for link</a></p> : 
+            <p>Location: {event.location}</p>)}
+          {!isPast(eventDate) && <p>Available Slots: {event.availableSlots}</p>}
+          {isPast(eventDate) && isAttending && (
+            <>
+              <Typography component="legend">Rate this event:</Typography>
+              <Rating
+                name="simple-controlled"
+                value={rating}
+                onChange={handleRatingChange}
+              />
+            </>
           )}
-          <p>Available Slots: {event.availableSlots}</p>
-          {isAttending && (
+          {!isPast(eventDate) && isAttending && (
             <Button
               onClick={() => handleUnAttend(event._id)}
               sx={{
@@ -122,37 +131,14 @@ const EventDetails = () => {
           {isUserEvent && (
             <div>
               <Button
-                size="small"
-                sx={{
-                  flex: 1,
-                  bgcolor: "#61dafb",
-                  "&:hover": {
-                    bgcolor: "#60d0ea",
-                  },
-                  color: "#fff",
-                  ":disabled": {
-                    bgcolor: "grey",
-                    color: "white",
-                  },
-                  mr: 0.5,
-                }}
-                onClick={() => handleEditEvent(event._id)}
+                onClick={() => navigate(`/events/edit/${eventId}`)}
+                sx={{ mr: 0.5, bgcolor: "primary.main", '&:hover': { bgcolor: "primary.dark" } }}
               >
                 Edit
               </Button>
-
               <Button
-                size="small"
-                sx={{
-                  flex: 1,
-                  color: "#fff",
-                  bgcolor: "#61dafb",
-                  "&:hover": {
-                    bgcolor: "#60d0ea",
-                    color: "#fff",
-                  },
-                }}
-                onClick={() => handleDeleteEvent(event._id)}
+                onClick={() => dispatch(deleteEvent(eventId))}
+                sx={{ bgcolor: "error.main", '&:hover': { bgcolor: "error.dark" } }}
               >
                 Delete
               </Button>
@@ -161,26 +147,26 @@ const EventDetails = () => {
         </div>
 
         <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-      >
-        <SnackbarContent
-          message={snackbarMessage}
-          className={!isError ? "snack-positive" : "snack-negative"}
-          action={
-            <IconButton
-              size="small"
-              aria-label="close"
-              color="inherit"
-              onClick={handleSnackbarClose}
-            >
-              <Close fontSize="small" />
-            </IconButton>
-          }
-        />
-      </Snackbar>
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        >
+          <SnackbarContent
+            message={snackbarMessage}
+            className={!isError ? "snack-positive" : "snack-negative"}
+            action={
+              <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleSnackbarClose}
+              >
+                <Close fontSize="small" />
+              </IconButton>
+            }
+          />
+        </Snackbar>
       </div>
     </>
   );
