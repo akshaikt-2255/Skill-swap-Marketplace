@@ -20,6 +20,8 @@ const Header = () => {
     const isUser = localStorage.getItem("username");
     if (isUser && user) {
       setLoggedInUser(user?.username);
+    } else {
+      setLoggedInUser(null)
     }
   }, [user]);
 
