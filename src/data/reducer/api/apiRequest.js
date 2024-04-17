@@ -1,5 +1,7 @@
+const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api';
+
 export const createUserApi = async (userData) => {
-  const response = await fetch("http://localhost:4000/api/auth/register", {
+  const response = await fetch(`${baseUrl}/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -17,7 +19,7 @@ export const createUserApi = async (userData) => {
 };
 
 export const getUserApi = async (userData) => {
-  const response = await fetch("http://localhost:4000/api/auth/login", {
+  const response = await fetch(`${baseUrl}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -33,7 +35,7 @@ export const getUserApi = async (userData) => {
 };
 
 export const updateUserApi = async (userData) => {
-  const response = await fetch("http://localhost:4000/api/auth/updateUser", {
+  const response = await fetch(`${baseUrl}/auth/updateUser`, {
     method: "PUT",
     body: userData,
   });
@@ -47,7 +49,7 @@ export const updateUserApi = async (userData) => {
 };
 
 export const checkUserPassword = async (userData) => {
-  const response = await fetch("http://localhost:4000/api/auth/checkPassword", {
+  const response = await fetch(`${baseUrl}/auth/checkPassword`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -64,7 +66,7 @@ export const checkUserPassword = async (userData) => {
 };
 
 export const fetchUsersWithSkillsApi = async () => {
-  const response = await fetch("http://localhost:4000/api/auth/skills", {
+  const response = await fetch(`${baseUrl}/auth/skills`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -80,7 +82,7 @@ export const fetchUsersWithSkillsApi = async () => {
 };
 
 export const followUserApi = async (currentUserId, followUserId) => {
-  const response = await fetch("http://localhost:4000/api/auth/follow", {
+  const response = await fetch(`${baseUrl}/auth/follow`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -103,7 +105,7 @@ export const followUserApi = async (currentUserId, followUserId) => {
 export const getConversations = async (conversationId) => {
   try {
     const response = await fetch(
-      `http://localhost:4000/api/auth/conversations/${conversationId}`,
+      `${baseUrl}/auth/conversations/${conversationId}`,
       {
         method: "GET",
         headers: {
@@ -121,7 +123,7 @@ export const getConversations = async (conversationId) => {
 export const getUsernameById = async (userId) => {
   try {
     const response = await fetch(
-      `http://localhost:4000/api/auth/username/${userId}`,
+      `${baseUrl}/auth/username/${userId}`,
       {
         method: "GET",
         headers: {
@@ -138,7 +140,7 @@ export const getUsernameById = async (userId) => {
 
 export const getUsernameByEmail = async (email) => {
   try {
-    const response = await fetch("http://localhost:4000/api/auth/username", {
+    const response = await fetch(`${baseUrl}/auth/username`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -155,7 +157,7 @@ export const getUsernameByEmail = async (email) => {
 export const getUserById = async (userId) => {
   try {
     const response = await fetch(
-      `http://localhost:4000/api/auth/user/id/${userId}`,
+      `${baseUrl}/auth/user/id/${userId}`,
       {
         method: "GET",
         headers: {
@@ -172,7 +174,7 @@ export const getUserById = async (userId) => {
 
 export const getUsers = async () => {
   try {
-    const response = await fetch(`http://localhost:4000/api/auth/users`, {
+    const response = await fetch(`${baseUrl}/auth/users`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -186,7 +188,7 @@ export const getUsers = async () => {
 };
 
 export const createEventApi = async (eventData) => {
-  const response = await fetch("http://localhost:4000/api/events/create", {
+  const response = await fetch(`${baseUrl}/events/create`, {
     method: "POST",
     body: eventData,
   });
@@ -201,7 +203,7 @@ export const createEventApi = async (eventData) => {
 
 export const getEventsByHostIdApi = async (hostId) => {
   const response = await fetch(
-    `http://localhost:4000/api/events/host/${hostId}`,
+    `${baseUrl}/events/host/${hostId}`,
     {
       method: "GET",
       headers: {
@@ -220,7 +222,7 @@ export const getEventsByHostIdApi = async (hostId) => {
 };
 
 export const getAllEventsApi = async (hostId) => {
-  const response = await fetch(`http://localhost:4000/api/events/`, {
+  const response = await fetch(`${baseUrl}/events/`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -237,7 +239,7 @@ export const getAllEventsApi = async (hostId) => {
 };
 
 export const deleteEventApi = async (eventId) => {
-  const response = await fetch(`http://localhost:4000/api/events/${eventId}`, {
+  const response = await fetch(`${baseUrl}/events/${eventId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -254,7 +256,7 @@ export const deleteEventApi = async (eventId) => {
 };
 
 export const getEventByIdApi = async (eventId) => {
-  const response = await fetch(`http://localhost:4000/api/events/${eventId}`, {
+  const response = await fetch(`${baseUrl}/events/${eventId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -271,7 +273,7 @@ export const getEventByIdApi = async (eventId) => {
 
 export const updateEventApi = async (eventId, eventData) => {
   console.log({ eventData });
-  const response = await fetch(`http://localhost:4000/api/events/${eventId}`, {
+  const response = await fetch(`${baseUrl}/events/${eventId}`, {
     method: "PUT",
     body: eventData,
   });
@@ -286,7 +288,7 @@ export const updateEventApi = async (eventId, eventData) => {
 
 export const removeFollowerApi = async (userId, followerId) => {
   const response = await fetch(
-    `http://localhost:4000/api/auth/removeFollower`,
+    `${baseUrl}/auth/removeFollower`,
     {
       method: "PUT",
       headers: {
@@ -309,7 +311,7 @@ export const removeFollowerApi = async (userId, followerId) => {
 };
 
 export const unfollowApi = async (userId, unfollowId) => {
-  const response = await fetch(`http://localhost:4000/api/auth/unfollow`, {
+  const response = await fetch(`${baseUrl}/auth/unfollow`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -331,7 +333,7 @@ export const unfollowApi = async (userId, unfollowId) => {
 
 export const attendEventApi = async (eventId, userId) => {
   const response = await fetch(
-    `http://localhost:4000/api/events/${eventId}/attend`,
+    `${baseUrl}/events/${eventId}/attend`,
     {
       method: "POST",
       headers: {
@@ -352,7 +354,7 @@ export const attendEventApi = async (eventId, userId) => {
 
 export const unAttendEventApi = async (eventId, userId) => {
   const response = await fetch(
-    `http://localhost:4000/api/events/${eventId}/unattend`,
+    `${baseUrl}/events/${eventId}/unattend`,
     {
       method: "POST",
       headers: {
@@ -372,7 +374,7 @@ export const unAttendEventApi = async (eventId, userId) => {
 };
 
 export const sendOtpApi = async (email) => {
-  const response = await fetch("http://localhost:4000/api/auth/send-otp", {
+  const response = await fetch(`${baseUrl}/auth/send-otp`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -389,7 +391,7 @@ export const sendOtpApi = async (email) => {
 };
 
 export const searchApi = async (searchTerm) => {
-  const response = await fetch(`http://localhost:4000/api/auth/search?term=${encodeURIComponent(searchTerm)}`, {
+  const response = await fetch(`${baseUrl}/auth/search?term=${encodeURIComponent(searchTerm)}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -407,7 +409,7 @@ export const searchApi = async (searchTerm) => {
 
 
 export const saveRatingApi = async (eventId, userId, rating) => {
-  const response = await fetch(`http://localhost:4000/api/events/${eventId}/rate`, {
+  const response = await fetch(`${baseUrl}/events/${eventId}/rate`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
