@@ -19,7 +19,8 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'https://skill-swap-marketplace.onrender.com'
+  'https://skill-swap-marketplace.onrender.com',
+  'https://skillswap-admin.onrender.com'
 ];
 
 const corsOptions = {
