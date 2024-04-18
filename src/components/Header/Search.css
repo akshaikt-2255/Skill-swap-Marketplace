@@ -8,7 +8,7 @@
     background-color: #f3f4f6;
     border: 1px solid #f3f4f6;
     outline: none;
-    width: 500px; /* Fixed width */
+    width: 300px;
 }
 
 .search-wrapper {    
@@ -31,7 +31,7 @@
 .results-dropdown {
     position: absolute;
     top: 100%; 
-    width: 500px; 
+    width: 300px; 
     z-index: 3; 
     background-color: white; 
     border: 1px solid #ddd; 
