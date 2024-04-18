@@ -23,6 +23,7 @@ const SkillsPage = lazy( ()=> import("./components/Skills/SkillsList"));
 const EventDetails = lazy(() => import('./components/Events/EventDetails'));
 const EditEvent = lazy(() => import('./components/Events/EditEvent'));
 const UserDetailPage = lazy(() => import('./components/Skills/UserDetails'));
+const ContactPage = lazy(() => import('./components/Contact/ContactUs'));
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/about" element={<AboutUs />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route  path="/profile" element={<ProfilePage />}/>
             <Route  path="/editprofile" element={<EditProfile />}/>
             <Route  path="/skills" element={<SkillsPage />}/>

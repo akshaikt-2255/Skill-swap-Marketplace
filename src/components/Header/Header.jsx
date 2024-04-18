@@ -75,16 +75,16 @@ const Header = () => {
             </>
           ) : (
             <>
-              <Link to="/skills" className="login-button">
+              <Link to="/skills" className="login-button nav-wrap">
                 Browse Skills
               </Link>
-              <Link to="/allEvents" className="login-button">
+              <Link to="/allEvents" className="login-button nav-wrap">
                 Browse Events
               </Link>
-              <Link to="/login" className="login-button">
+              <Link to="/login" className="login-button nav-wrap">
                 Log in
               </Link>
-              <Link to="/register" className="signup-button">
+              <Link to="/register" className="signup-button nav-wrap">
                 Sign up
               </Link>
             </>

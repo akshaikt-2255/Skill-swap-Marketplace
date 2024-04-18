@@ -97,6 +97,9 @@
       min-width: 300px;
       padding-left: 20px;
     }
+    .search-input {
+      width: 300px;
+    }
   }
 
   

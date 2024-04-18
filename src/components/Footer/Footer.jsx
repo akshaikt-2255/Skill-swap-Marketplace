@@ -101,8 +101,8 @@ const Footer = () => {
               <Link to="/about" className="footerLink">
                 About
               </Link>
-              <Link href="#" className="footerLink">
-                Blog
+              <Link to="/contact" className="footerLink">
+                Contact Us
               </Link>
               <Link href="#" className="footerLink">
                 Careers
