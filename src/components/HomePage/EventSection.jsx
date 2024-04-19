@@ -18,7 +18,7 @@ const SkillEventsSection = () => {
 
   useEffect(() => {
     if (allEvents?.length > 0) {
-      const filteredEvents = user ? allEvents.filter(event => event?.host._id !== user?._id) : [...allEvents];
+      const filteredEvents = user ? allEvents.filter(event => event?.host?._id !== user?._id) : [...allEvents];
       const randomEvents = filteredEvents.sort(() => 0.5 - Math.random()).slice(0, 3);
       setDisplayedEvents(randomEvents);
     }
@@ -34,13 +34,13 @@ const SkillEventsSection = () => {
       <div className="skill-events-grid">
         {displayedEvents?.map((event, index) => (
           <div className="skill-event-card" key={index}>
-            <img onClick={() => onNavigateEvent(event._id)} src={getImageUrl(event.eventImage) || "defaultImage.jpg"} alt={event.title} className="skill-event-image" />
+            <img onClick={() => onNavigateEvent(event?._id)} src={getImageUrl(event?.eventImage) || "defaultImage.jpg"} alt={event.title} className="skill-event-image" />
             <div className="skill-event-info">
-              <h3 className="skill-event-title">{event.title}</h3>
-              <p className="skill-event-hosted-by">Hosted by: {event.host.name}</p>
-              <p className="skill-event-date">{new Date(event.datetime).toLocaleString()}</p>
-              <p className="skill-event-attendees">{event.attendees.length} going</p>
-              <p className="skill-event-price">{event.price || 'Free'}</p>
+              <h3 className="skill-event-title">{event?.title}</h3>
+              <p className="skill-event-hosted-by">Hosted by: {event?.host?.name}</p>
+              <p className="skill-event-date">{new Date(event?.datetime).toLocaleString()}</p>
+              <p className="skill-event-attendees">{event?.attendees?.length} going</p>
+              <p className="skill-event-price">{event?.price || 'Free'}</p>
             </div>
           </div>
         ))}
