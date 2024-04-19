@@ -49,7 +49,7 @@ const AllEvents = () => {
 
   if (isLoading) return <p>Loading...</p>;
   const userEvents = user
-    ? allEvents.filter((event) => event.host._id !== user._id)
+    ? allEvents.filter((event) => event?.host?._id !== user?._id)
     : allEvents;
   return (
     <>
@@ -66,22 +66,22 @@ const AllEvents = () => {
             userEvents.map((event, index) => (
               <div className="skill-event-card" key={index}>
                 <img
-                  onClick={() => onNavigateEvent(event._id)}
+                  onClick={() => onNavigateEvent(event?._id)}
                   src={getImageUrl(event.eventImage) || "defaultImage.jpg"}
-                  alt={event.title}
+                  alt={event?.title}
                   className="skill-event-image"
                 />
                 <div className="skill-event-info">
-                  <h3 className="skill-event-title">{event.title}</h3>
+                  <h3 className="skill-event-title">{event?.title}</h3>
                   <p className="skill-event-hosted-by">
-                    Hosted by: {event.host.name}
+                    Hosted by: {event?.host?.name}
                   </p>
                   <p className="skill-event-date">
                     {format(parseISO(event?.datetime), "MMM d, yyyy")}
                   </p>
                   {event.online ? (
                     <a
-                      href={event.link}
+                      href={event?.link}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="skill-event-link"
@@ -89,20 +89,20 @@ const AllEvents = () => {
                       Click here for link
                     </a>
                   ) : (
-                    <p className="skill-event-attendees">{event.location}</p>
+                    <p className="skill-event-attendees">{event?.location}</p>
                   )}
                   <p className="skill-event-price">Free</p>
                 </div>
                 <div className="skill-event-info">
-                {isPast(new Date(event.datetime)) ? (
+                {isPast(new Date(event?.datetime)) ? (
                     <Typography sx={{ color: "grey" }}>Completed</Typography>
                   ) : (
                     <div className="skill-event-info">
-                      {user && event.attendees.some(attendee => attendee._id === user._id) ? (
+                      {user && event?.attendees.some(attendee => attendee?._id === user?._id) ? (
                         <Typography sx={{ color: "green" }}>Attending</Typography>
                       ) : (
                         <Button
-                          onClick={() => handleAttend(event._id)}
+                          onClick={() => handleAttend(event?._id)}
                           sx={{
                             flex: 1,
                             color: "#fff",
