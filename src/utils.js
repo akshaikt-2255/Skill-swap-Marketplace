@@ -1,1 +1,1 @@
-export const getImageUrl = (url) => `http://localhost:4000/${url}`;
+export const getImageUrl = (url) => `https://skill-swap-marketplace-api.onrender.com/${url}`;
